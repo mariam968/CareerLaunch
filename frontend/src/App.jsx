@@ -1,11 +1,28 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 import DashboardLayout from './layouts/DashboardLayout'
+
 import Dashboard from './pages/Dashboard'
+import Internships from './pages/Internships'
+import Saved from './pages/Saved'
+import Applications from './pages/Applications'
+import Logbook from './pages/Logbook'
+import Profile from './pages/Profile'
 
 function App() {
   return (
-    <DashboardLayout>
-      <Dashboard />
-    </DashboardLayout>
+    <BrowserRouter>
+      <DashboardLayout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/internships" element={<Internships />} />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/applications" element={<Applications />} />
+          <Route path="/logbook" element={<Logbook />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </DashboardLayout>
+    </BrowserRouter>
   )
 }
 
