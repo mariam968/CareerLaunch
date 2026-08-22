@@ -211,6 +211,7 @@ function Internships() {
           {filteredInternships.map((internship) => (
             <InternshipCard
               key={internship.id}
+              id={internship.id}
               title={internship.title}
               company={internship.company}
               location={internship.location}

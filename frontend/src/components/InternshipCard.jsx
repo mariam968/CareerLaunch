@@ -1,4 +1,7 @@
+
+import { Link } from 'react-router-dom'
 function InternshipCard({
+  id,
   title,
   company,
   location,
@@ -65,9 +68,12 @@ function InternshipCard({
           </p>
         </div>
 
-        <button className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
-          View details
-        </button>
+        <Link
+  to={`/internships/${id}`}
+  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+>
+  View details
+</Link>
       </div>
     </div>
   )
