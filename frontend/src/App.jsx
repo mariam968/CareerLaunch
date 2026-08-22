@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
+import InternshipDetails from './pages/InternshipDetails'
 import DashboardLayout from './layouts/DashboardLayout'
 
 import Dashboard from './pages/Dashboard'
@@ -14,13 +14,17 @@ function App() {
     <BrowserRouter>
       <DashboardLayout>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/internships" element={<Internships />} />
-          <Route path="/saved" element={<Saved />} />
-          <Route path="/applications" element={<Applications />} />
-          <Route path="/logbook" element={<Logbook />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+  <Route path="/" element={<Dashboard />} />
+  <Route path="/internships" element={<Internships />} />
+  <Route
+    path="/internships/:id"
+    element={<InternshipDetails />}
+  />
+  <Route path="/saved" element={<Saved />} />
+  <Route path="/applications" element={<Applications />} />
+  <Route path="/logbook" element={<Logbook />} />
+  <Route path="/profile" element={<Profile />} />
+</Routes>
       </DashboardLayout>
     </BrowserRouter>
   )
