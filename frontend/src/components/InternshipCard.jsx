@@ -1,5 +1,6 @@
-
 import { Link } from 'react-router-dom'
+import { useSavedInternships } from '../context/SavedInternshipsContext'
+
 function InternshipCard({
   id,
   title,
@@ -9,18 +10,34 @@ function InternshipCard({
   category,
   deadline,
 }) {
+  const { toggleSaved, isSaved } = useSavedInternships()
+
+  const internship = {
+    id,
+    title,
+    company,
+    location,
+    type,
+    category,
+    deadline,
+  }
+
+  const saved = isSaved(id)
+
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-      
+
       {/* Top section */}
       <div className="flex items-start justify-between">
+
         <div className="flex gap-4">
-          
-          {/* Company logo placeholder */}
-          <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-lg font-bold text-blue-600">
+
+          {/* Company logo */}
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-lg font-bold text-blue-600">
             {company.charAt(0)}
           </div>
 
+          {/* Internship information */}
           <div>
             <h3 className="text-lg font-semibold text-slate-900">
               {title}
@@ -30,19 +47,31 @@ function InternshipCard({
               {company}
             </p>
           </div>
+
         </div>
 
-        {/* Save */}
+        {/* Save button */}
         <button
-          className="text-xl text-slate-400 transition hover:text-red-500"
-          title="Save internship"
+          onClick={() => toggleSaved(internship)}
+          className={`text-xl transition ${
+            saved
+              ? 'text-red-500'
+              : 'text-slate-400 hover:text-red-500'
+          }`}
+          title={
+            saved
+              ? 'Remove from saved'
+              : 'Save internship'
+          }
         >
-          ♡
+          {saved ? '♥' : '♡'}
         </button>
+
       </div>
 
       {/* Tags */}
       <div className="mt-5 flex flex-wrap gap-2">
+
         <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
           {type}
         </span>
@@ -54,10 +83,12 @@ function InternshipCard({
         <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">
           📍 {location}
         </span>
+
       </div>
 
-      {/* Bottom */}
+      {/* Bottom section */}
       <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+
         <div>
           <p className="text-xs text-slate-400">
             Application deadline
@@ -68,13 +99,16 @@ function InternshipCard({
           </p>
         </div>
 
+        {/* Details button */}
         <Link
-  to={`/internships/${id}`}
-  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
->
-  View details
-</Link>
+          to={`/internships/${id}`}
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+        >
+          View details
+        </Link>
+
       </div>
+
     </div>
   )
 }
