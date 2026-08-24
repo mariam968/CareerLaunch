@@ -1,119 +1,77 @@
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-
-const internships = [
-  {
-    id: 1,
-    title: 'Software Developer Intern',
-    company: 'TechNova Uganda',
-    location: 'Kampala',
-  },
-  {
-    id: 2,
-    title: 'Frontend Developer Intern',
-    company: 'Digital Solutions Ltd',
-    location: 'Kampala',
-  },
-  {
-    id: 3,
-    title: 'UI/UX Design Intern',
-    company: 'Creative Studio',
-    location: 'Kampala',
-  },
-  {
-    id: 4,
-    title: 'Cybersecurity Intern',
-    company: 'SecureNet Africa',
-    location: 'Remote',
-  },
-]
+import { submitApplication } from '../services/applicationApi'
 
 function ApplicationForm() {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const internship = internships.find(
-    (item) => item.id === Number(id)
-  )
-
   const [formData, setFormData] = useState({
-    fullName: '',
+    full_name: '',
     email: '',
     phone: '',
     institution: '',
     course: '',
-    yearOfStudy: '',
-    coverLetter: '',
+    year_of_study: '',
+    cover_letter: '',
+    cv: null,
   })
 
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value, files } = event.target
 
     setFormData((previous) => ({
       ...previous,
-      [name]: value,
+      [name]: files ? files[0] : value,
     }))
+
+    setError('')
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
-    navigate('/application-success')
-  }
+    setSubmitting(true)
+    setError('')
 
-  if (!internship) {
-    return (
-      <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
-        <h1 className="text-2xl font-bold text-slate-900">
-          Internship not found
-        </h1>
+    try {
+      await submitApplication({
+        internship: id,
+        ...formData,
+      })
 
-        <p className="mt-2 text-slate-500">
-          We couldn't find the internship you're applying for.
-        </p>
-
-        <Link
-          to="/internships"
-          className="mt-5 inline-block rounded-lg bg-blue-600 px-5 py-3 text-sm font-medium text-white hover:bg-blue-700"
-        >
-          Browse internships
-        </Link>
-      </div>
-    )
+      navigate('/application-success')
+    } catch (err) {
+      console.error(err)
+      setError(
+        err.message || 'Unable to submit application.'
+      )
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
-    <div>
+    <div className="mx-auto max-w-3xl">
+
       {/* Header */}
       <div className="mb-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-5 text-sm font-medium text-blue-600 hover:text-blue-700"
+        <Link
+          to={`/internships/${id}`}
+          className="text-sm font-medium text-blue-600 hover:text-blue-700"
         >
-          ← Back
-        </button>
+          ← Back to internship
+        </Link>
 
-        <h1 className="text-2xl font-bold text-slate-900">
+        <h1 className="mt-5 text-2xl font-bold text-slate-900">
           Apply for Internship
         </h1>
 
-        <p className="mt-1 text-slate-500">
-          Complete your information to submit your application.
-        </p>
-      </div>
-
-      {/* Internship summary */}
-      <div className="mb-6 rounded-xl border border-blue-100 bg-blue-50 p-5">
-        <p className="text-sm font-medium text-blue-600">
-          Applying for
-        </p>
-
-        <h2 className="mt-1 text-lg font-bold text-slate-900">
-          {internship.title}
-        </h2>
-
-        <p className="mt-1 text-sm text-slate-600">
-          {internship.company} • {internship.location}
+        <p className="mt-2 text-slate-500">
+          Complete the form below to submit your application.
         </p>
       </div>
 
@@ -122,6 +80,8 @@ function ApplicationForm() {
         onSubmit={handleSubmit}
         className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
       >
+
+        {/* Personal information */}
         <h2 className="text-lg font-bold text-slate-900">
           Personal Information
         </h2>
@@ -135,8 +95,8 @@ function ApplicationForm() {
 
             <input
               type="text"
-              name="fullName"
-              value={formData.fullName}
+              name="full_name"
+              value={formData.full_name}
               onChange={handleChange}
               required
               placeholder="Enter your full name"
@@ -176,6 +136,15 @@ function ApplicationForm() {
             />
           </div>
 
+        </div>
+
+        {/* Education */}
+        <h2 className="mt-10 text-lg font-bold text-slate-900">
+          Education
+        </h2>
+
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
+
           <div>
             <label className="text-sm font-medium text-slate-700">
               Institution
@@ -214,8 +183,8 @@ function ApplicationForm() {
             </label>
 
             <select
-              name="yearOfStudy"
-              value={formData.yearOfStudy}
+              name="year_of_study"
+              value={formData.year_of_study}
               onChange={handleChange}
               required
               className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-blue-500"
@@ -225,63 +194,71 @@ function ApplicationForm() {
               <option value="Year 2">Year 2</option>
               <option value="Year 3">Year 3</option>
               <option value="Year 4">Year 4</option>
-              <option value="Other">Other</option>
             </select>
           </div>
 
         </div>
 
         {/* Cover letter */}
-        <div className="mt-6">
-          <label className="text-sm font-medium text-slate-700">
-            Why are you interested in this internship?
-          </label>
+        <h2 className="mt-10 text-lg font-bold text-slate-900">
+          Cover Letter
+        </h2>
 
-          <textarea
-            name="coverLetter"
-            value={formData.coverLetter}
-            onChange={handleChange}
-            required
-            rows="6"
-            placeholder="Tell the company why you would be a good candidate..."
-            className="mt-2 w-full resize-none rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-          />
-        </div>
+        <textarea
+          name="cover_letter"
+          value={formData.cover_letter}
+          onChange={handleChange}
+          required
+          rows="7"
+          placeholder="Tell the company why you are interested in this internship..."
+          className="mt-6 w-full resize-none rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+        />
 
         {/* CV */}
+        <h2 className="mt-10 text-lg font-bold text-slate-900">
+          CV / Resume
+        </h2>
+
         <div className="mt-6">
           <label className="text-sm font-medium text-slate-700">
-            Upload CV
+            Upload your CV
           </label>
 
           <input
             type="file"
+            name="cv"
             accept=".pdf,.doc,.docx"
+            onChange={handleChange}
             className="mt-2 block w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm"
           />
 
           <p className="mt-2 text-xs text-slate-400">
-            PDF, DOC or DOCX recommended.
+            PDF, DOC or DOCX.
           </p>
         </div>
 
-        {/* Buttons */}
-        <div className="mt-8 flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="rounded-lg border border-slate-200 px-5 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50"
-          >
-            Cancel
-          </button>
+        {/* Error */}
+        {error && (
+          <div className="mt-6 rounded-lg border border-red-200 bg-red-50 p-4">
+            <p className="text-sm text-red-600">
+              {error}
+            </p>
+          </div>
+        )}
 
+        {/* Submit */}
+        <div className="mt-8 flex justify-end">
           <button
             type="submit"
-            className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700"
+            disabled={submitting}
+            className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Submit Application
+            {submitting
+              ? 'Submitting...'
+              : 'Submit Application'}
           </button>
         </div>
+
       </form>
     </div>
   )
