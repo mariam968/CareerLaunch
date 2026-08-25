@@ -15,6 +15,8 @@ import Logbook from './pages/Logbook'
 import Profile from './pages/Profile'
 import Login from './pages/Login'
 
+import ProtectedRoute from './components/ProtectedRoute'
+
 
 function App() {
   return (
@@ -23,71 +25,120 @@ function App() {
 
         <Routes>
 
-          {/* Login - outside dashboard layout */}
+          {/* Public page */}
           <Route
             path="/login"
             element={<Login />}
           />
 
-          {/* Student dashboard */}
+          {/* Protected dashboard area */}
           <Route
-            path="/*"
+            path="/"
             element={
-              <DashboardLayout>
-                <Routes>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Dashboard />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/"
-                    element={<Dashboard />}
-                  />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Dashboard />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/dashboard"
-                    element={<Dashboard />}
-                  />
+          <Route
+            path="/internships"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Internships />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/internships"
-                    element={<Internships />}
-                  />
+          <Route
+            path="/internships/:id"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <InternshipDetails />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/internships/:id"
-                    element={<InternshipDetails />}
-                  />
+          <Route
+            path="/internships/:id/apply"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <ApplicationForm />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/internships/:id/apply"
-                    element={<ApplicationForm />}
-                  />
+          <Route
+            path="/application-success"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <ApplicationSuccess />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/application-success"
-                    element={<ApplicationSuccess />}
-                  />
+          <Route
+            path="/applications"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Applications />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/applications"
-                    element={<Applications />}
-                  />
+          <Route
+            path="/saved"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Saved />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/saved"
-                    element={<Saved />}
-                  />
+          <Route
+            path="/logbook"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Logbook />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
 
-                  <Route
-                    path="/logbook"
-                    element={<Logbook />}
-                  />
-
-                  <Route
-                    path="/profile"
-                    element={<Profile />}
-                  />
-
-                </Routes>
-              </DashboardLayout>
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Profile />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
