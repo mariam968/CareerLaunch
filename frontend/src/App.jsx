@@ -13,56 +13,86 @@ import Applications from './pages/Applications'
 import Saved from './pages/Saved'
 import Logbook from './pages/Logbook'
 import Profile from './pages/Profile'
+import Login from './pages/Login'
+
 
 function App() {
   return (
     <BrowserRouter>
       <SavedInternshipsProvider>
-        <DashboardLayout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
 
-            <Route
-              path="/internships"
-              element={<Internships />}
-            />
+        <Routes>
 
-            <Route
-              path="/internships/:id"
-              element={<InternshipDetails />}
-            />
+          {/* Login - outside dashboard layout */}
+          <Route
+            path="/login"
+            element={<Login />}
+          />
 
-            <Route
-              path="/internships/:id/apply"
-              element={<ApplicationForm />}
-            />
+          {/* Student dashboard */}
+          <Route
+            path="/*"
+            element={
+              <DashboardLayout>
+                <Routes>
 
-            <Route
-              path="/application-success"
-              element={<ApplicationSuccess />}
-            />
+                  <Route
+                    path="/"
+                    element={<Dashboard />}
+                  />
 
-            <Route
-              path="/applications"
-              element={<Applications />}
-            />
+                  <Route
+                    path="/dashboard"
+                    element={<Dashboard />}
+                  />
 
-            <Route
-              path="/saved"
-              element={<Saved />}
-            />
+                  <Route
+                    path="/internships"
+                    element={<Internships />}
+                  />
 
-            <Route
-              path="/logbook"
-              element={<Logbook />}
-            />
+                  <Route
+                    path="/internships/:id"
+                    element={<InternshipDetails />}
+                  />
 
-            <Route
-              path="/profile"
-              element={<Profile />}
-            />
-          </Routes>
-        </DashboardLayout>
+                  <Route
+                    path="/internships/:id/apply"
+                    element={<ApplicationForm />}
+                  />
+
+                  <Route
+                    path="/application-success"
+                    element={<ApplicationSuccess />}
+                  />
+
+                  <Route
+                    path="/applications"
+                    element={<Applications />}
+                  />
+
+                  <Route
+                    path="/saved"
+                    element={<Saved />}
+                  />
+
+                  <Route
+                    path="/logbook"
+                    element={<Logbook />}
+                  />
+
+                  <Route
+                    path="/profile"
+                    element={<Profile />}
+                  />
+
+                </Routes>
+              </DashboardLayout>
+            }
+          />
+
+        </Routes>
+
       </SavedInternshipsProvider>
     </BrowserRouter>
   )
