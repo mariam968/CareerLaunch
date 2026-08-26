@@ -16,8 +16,10 @@ class ApplicationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Application
+
         fields = [
             'id',
+            'student',
             'internship',
             'internship_title',
             'company',
@@ -35,6 +37,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
 
         read_only_fields = [
             'id',
+            'student',
             'internship_title',
             'company',
             'status',

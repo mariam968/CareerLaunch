@@ -1,7 +1,13 @@
 const API_URL = "http://127.0.0.1:8000/api/applications/";
 
 export async function getApplications() {
-  const response = await fetch(API_URL);
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(API_URL, {
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  });
 
   const data = await response.json();
 
@@ -13,16 +19,23 @@ export async function getApplications() {
 }
 
 export async function submitApplication(applicationData) {
+  const token = localStorage.getItem("token");
+
   const formData = new FormData();
 
   Object.entries(applicationData).forEach(([key, value]) => {
-    if (value !== null && value !== undefined) {
+    if (key !== "student" && value !== null && value !== undefined) {
       formData.append(key, value);
     }
   });
 
   const response = await fetch(`${API_URL}create/`, {
     method: "POST",
+
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+
     body: formData,
   });
 

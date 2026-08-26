@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from internships.models import Internship
 
@@ -11,6 +12,14 @@ class Application(models.Model):
         ('Accepted', 'Accepted'),
         ('Rejected', 'Rejected'),
     ]
+
+    student = models.ForeignKey(
+       User,
+       on_delete=models.CASCADE,
+       related_name='applications',
+       null=True,
+       blank=True
+    )
 
     internship = models.ForeignKey(
         Internship,
