@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -17,6 +18,7 @@ class StudentRegistrationView(generics.CreateAPIView):
 
 
 class StudentLoginView(APIView):
+
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -48,8 +50,10 @@ class StudentProfileView(generics.RetrieveUpdateAPIView):
         profile, created = StudentProfile.objects.get_or_create(
             user=self.request.user,
             defaults={
-                'full_name': self.request.user.get_full_name()
-                or self.request.user.username,
+                'full_name': (
+                    self.request.user.get_full_name()
+                    or self.request.user.username
+                ),
                 'phone': '',
                 'institution': '',
                 'course': '',

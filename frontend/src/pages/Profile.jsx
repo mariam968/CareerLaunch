@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react'
 import { getProfile, updateProfile } from '../services/profileApi'
 
@@ -14,6 +15,7 @@ function Profile() {
   })
 
   const [cv, setCv] = useState(null)
+  const [cvUrl, setCvUrl] = useState('')
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -33,6 +35,12 @@ function Profile() {
           location: data.location || '',
           skills: data.skills || '',
         })
+
+        if (data.cv) {
+          setCvUrl(data.cv)
+        } else {
+          setCvUrl('')
+        }
       } catch (error) {
         setError(error.message)
       } finally {
@@ -53,6 +61,16 @@ function Profile() {
 
     setSaved(false)
     setError('')
+  }
+
+  const handleCvChange = (event) => {
+    const selectedFile = event.target.files[0]
+
+    if (selectedFile) {
+      setCv(selectedFile)
+      setSaved(false)
+      setError('')
+    }
   }
 
   const handleSubmit = async (event) => {
@@ -89,6 +107,11 @@ function Profile() {
         skills: data.skills || '',
       })
 
+      if (data.cv) {
+        setCvUrl(data.cv)
+      }
+
+      setCv(null)
       setSaved(true)
     } catch (error) {
       setError(error.message)
@@ -162,7 +185,6 @@ function Profile() {
               type="email"
               value={profile.email}
               disabled
-              placeholder="example@email.com"
               className="mt-2 w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none"
             />
           </div>
@@ -209,7 +231,6 @@ function Profile() {
               <option value="Other">Other</option>
             </select>
           </div>
-
         </div>
 
         {/* Education */}
@@ -274,7 +295,6 @@ function Profile() {
               <option value="Other">Other</option>
             </select>
           </div>
-
         </div>
 
         {/* Skills */}
@@ -314,13 +334,38 @@ function Profile() {
           <input
             type="file"
             accept=".pdf,.doc,.docx"
-            onChange={(event) => setCv(event.target.files[0])}
+            onChange={handleCvChange}
             className="mt-2 block w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm"
           />
 
           <p className="mt-2 text-xs text-slate-400">
             PDF, DOC or DOCX recommended.
           </p>
+
+          {/* Existing CV */}
+          {cvUrl && (
+            <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-sm font-medium text-slate-700">
+                CV uploaded
+              </p>
+
+              <a
+                href={cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-block text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                View uploaded CV →
+              </a>
+            </div>
+          )}
+
+          {/* New CV selected */}
+          {cv && (
+            <p className="mt-3 text-sm text-slate-600">
+              New CV selected: <strong>{cv.name}</strong>
+            </p>
+          )}
         </div>
 
         {/* Save */}
@@ -338,7 +383,6 @@ function Profile() {
           >
             Save Profile
           </button>
-
         </div>
       </form>
     </div>
@@ -346,3 +390,4 @@ function Profile() {
 }
 
 export default Profile
+
