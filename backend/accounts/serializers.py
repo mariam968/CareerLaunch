@@ -52,3 +52,55 @@ class StudentRegistrationSerializer(serializers.Serializer):
         )
 
         return user
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentProfile
+        fields = [
+            'id',
+            'full_name',
+            'phone',
+            'institution',
+            'course',
+            'year_of_study',
+            'location',
+            'skills',
+            'cv',
+            'created_at',
+            'updated_at',
+        ]
+
+        read_only_fields = [
+            'id',
+            'created_at',
+            'updated_at',
+        ]
+class StudentProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        source='user.email',
+        read_only=True
+    )
+
+    class Meta:
+        model = StudentProfile
+        fields = [
+            'id',
+            'full_name',
+            'email',
+            'phone',
+            'institution',
+            'course',
+            'year_of_study',
+            'location',
+            'skills',
+            'cv',
+            'created_at',
+            'updated_at',
+        ]
+
+        read_only_fields = [
+            'id',
+            'email',
+            'created_at',
+            'updated_at',
+        ]

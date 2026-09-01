@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { getProfile, updateProfile } from '../services/profileApi'
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -12,7 +13,35 @@ function Profile() {
     skills: '',
   })
 
+  const [cv, setCv] = useState(null)
   const [saved, setSaved] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const data = await getProfile()
+
+        setProfile({
+          fullName: data.full_name || '',
+          email: data.email || '',
+          phone: data.phone || '',
+          institution: data.institution || '',
+          course: data.course || '',
+          yearOfStudy: data.year_of_study || '',
+          location: data.location || '',
+          skills: data.skills || '',
+        })
+      } catch (error) {
+        setError(error.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadProfile()
+  }, [])
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -23,11 +52,55 @@ function Profile() {
     }))
 
     setSaved(false)
+    setError('')
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setSaved(true)
+
+    try {
+      setError('')
+      setSaved(false)
+
+      const profileData = {
+        full_name: profile.fullName,
+        phone: profile.phone,
+        institution: profile.institution,
+        course: profile.course,
+        year_of_study: profile.yearOfStudy,
+        location: profile.location,
+        skills: profile.skills,
+      }
+
+      if (cv) {
+        profileData.cv = cv
+      }
+
+      const data = await updateProfile(profileData)
+
+      setProfile({
+        fullName: data.full_name || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        institution: data.institution || '',
+        course: data.course || '',
+        yearOfStudy: data.year_of_study || '',
+        location: data.location || '',
+        skills: data.skills || '',
+      })
+
+      setSaved(true)
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="py-10 text-center text-slate-500">
+        Loading profile...
+      </div>
+    )
   }
 
   return (
@@ -43,6 +116,13 @@ function Profile() {
           background and skills.
         </p>
       </div>
+
+      {/* Error */}
+      {error && (
+        <div className="mb-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+          {error}
+        </div>
+      )}
 
       {/* Profile form */}
       <form
@@ -80,12 +160,10 @@ function Profile() {
 
             <input
               type="email"
-              name="email"
               value={profile.email}
-              onChange={handleChange}
+              disabled
               placeholder="example@email.com"
-              required
-              className="mt-2 w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="mt-2 w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none"
             />
           </div>
 
@@ -236,6 +314,7 @@ function Profile() {
           <input
             type="file"
             accept=".pdf,.doc,.docx"
+            onChange={(event) => setCv(event.target.files[0])}
             className="mt-2 block w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm"
           />
 
