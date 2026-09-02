@@ -7,7 +7,10 @@ from .models import StudentProfile
 class StudentRegistrationSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
     email = serializers.EmailField()
-    password = serializers.CharField(write_only=True, min_length=8)
+    password = serializers.CharField(
+        write_only=True,
+        min_length=8
+    )
 
     full_name = serializers.CharField(max_length=150)
     phone = serializers.CharField(max_length=20)
@@ -15,7 +18,10 @@ class StudentRegistrationSerializer(serializers.Serializer):
     course = serializers.CharField(max_length=200)
     year_of_study = serializers.CharField(max_length=50)
     location = serializers.CharField(max_length=100)
-    skills = serializers.CharField(required=False, allow_blank=True)
+    skills = serializers.CharField(
+        required=False,
+        allow_blank=True
+    )
 
     def validate_username(self, value):
         if User.objects.filter(username=value).exists():
@@ -57,7 +63,8 @@ class StudentRegistrationSerializer(serializers.Serializer):
 class StudentProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         source='user.email',
-        read_only=True
+        required=False,
+        allow_blank=True
     )
 
     class Meta:
@@ -80,7 +87,22 @@ class StudentProfileSerializer(serializers.ModelSerializer):
 
         read_only_fields = [
             'id',
-            'email',
             'created_at',
             'updated_at',
         ]
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop('user', {})
+
+        email = user_data.get('email')
+
+        if email is not None:
+            instance.user.email = email
+            instance.user.save(update_fields=['email'])
+
+        for attribute, value in validated_data.items():
+            setattr(instance, attribute, value)
+
+        instance.save()
+
+        return instance

@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { submitApplication } from '../services/applicationApi'
+import { getProfile } from '../services/profileApi'
 
 function ApplicationForm() {
   const { id } = useParams()
@@ -17,8 +18,44 @@ function ApplicationForm() {
     cv: null,
   })
 
+  const [loadingProfile, setLoadingProfile] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [savedCvUrl, setSavedCvUrl] = useState('')
+  const [useSavedCv, setUseSavedCv] = useState(false)
+
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const profile = await getProfile()
+
+        if (profile.cv) {
+          setSavedCvUrl(profile.cv)
+          setUseSavedCv(true)
+        }
+
+        setFormData((previous) => ({
+          ...previous,
+          full_name: profile.full_name || '',
+          email: profile.email || '',
+          phone: profile.phone || '',
+          institution: profile.institution || '',
+          course: profile.course || '',
+          year_of_study: profile.year_of_study || '',
+        }))
+      } catch (err) {
+        console.error(err)
+
+        setError(
+          'Unable to load your profile information. You can still fill in the form manually.'
+        )
+      } finally {
+        setLoadingProfile(false)
+      }
+    }
+
+    loadProfile()
+  }, [])
 
   const handleChange = (event) => {
     const { name, value, files } = event.target
@@ -41,17 +78,31 @@ function ApplicationForm() {
       await submitApplication({
         internship: id,
         ...formData,
+        use_saved_cv: useSavedCv,
       })
 
       navigate('/application-success')
     } catch (err) {
       console.error(err)
+
       setError(
         err.message || 'Unable to submit application.'
       )
     } finally {
       setSubmitting(false)
     }
+  }
+
+  if (loadingProfile) {
+    return (
+      <div className="mx-auto max-w-3xl">
+        <div className="rounded-xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+          <p className="text-slate-500">
+            Loading your profile information...
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -71,7 +122,8 @@ function ApplicationForm() {
         </h1>
 
         <p className="mt-2 text-slate-500">
-          Complete the form below to submit your application.
+          Review your information, write your cover letter,
+          and submit your application.
         </p>
       </div>
 
@@ -81,13 +133,22 @@ function ApplicationForm() {
         className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
       >
 
-        {/* Personal information */}
-        <h2 className="text-lg font-bold text-slate-900">
+        {/* Profile notice */}
+        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+          <p className="text-sm text-blue-700">
+            Your information has been loaded from your student profile.
+            You can edit it before submitting.
+          </p>
+        </div>
+
+        {/* Personal Information */}
+        <h2 className="mt-8 text-lg font-bold text-slate-900">
           Personal Information
         </h2>
 
         <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
 
+          {/* Full Name */}
           <div>
             <label className="text-sm font-medium text-slate-700">
               Full Name
@@ -104,6 +165,7 @@ function ApplicationForm() {
             />
           </div>
 
+          {/* Email */}
           <div>
             <label className="text-sm font-medium text-slate-700">
               Email Address
@@ -120,6 +182,7 @@ function ApplicationForm() {
             />
           </div>
 
+          {/* Phone */}
           <div>
             <label className="text-sm font-medium text-slate-700">
               Phone Number
@@ -145,6 +208,7 @@ function ApplicationForm() {
 
         <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
 
+          {/* Institution */}
           <div>
             <label className="text-sm font-medium text-slate-700">
               Institution
@@ -161,6 +225,7 @@ function ApplicationForm() {
             />
           </div>
 
+          {/* Course */}
           <div>
             <label className="text-sm font-medium text-slate-700">
               Course / Program
@@ -177,6 +242,7 @@ function ApplicationForm() {
             />
           </div>
 
+          {/* Year */}
           <div>
             <label className="text-sm font-medium text-slate-700">
               Year of Study
@@ -199,7 +265,7 @@ function ApplicationForm() {
 
         </div>
 
-        {/* Cover letter */}
+        {/* Cover Letter */}
         <h2 className="mt-10 text-lg font-bold text-slate-900">
           Cover Letter
         </h2>
@@ -220,21 +286,70 @@ function ApplicationForm() {
         </h2>
 
         <div className="mt-6">
-          <label className="text-sm font-medium text-slate-700">
-            Upload your CV
-          </label>
 
-          <input
-            type="file"
-            name="cv"
-            accept=".pdf,.doc,.docx"
-            onChange={handleChange}
-            className="mt-2 block w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm"
-          />
+          {/* Saved CV */}
+          {savedCvUrl && (
+            <div className="rounded-lg border border-blue-100 bg-blue-50 p-4">
 
-          <p className="mt-2 text-xs text-slate-400">
-            PDF, DOC or DOCX.
-          </p>
+              <div className="flex items-start gap-3">
+
+                <input
+                  type="checkbox"
+                  checked={useSavedCv}
+                  onChange={(event) =>
+                    setUseSavedCv(event.target.checked)
+                  }
+                  className="mt-1 h-4 w-4"
+                />
+
+                <div>
+                  <p className="text-sm font-medium text-slate-800">
+                    Use my saved CV
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    You already have a CV saved in your profile.
+                  </p>
+
+                  <a
+                    href={savedCvUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block text-sm font-medium text-blue-600 hover:text-blue-700"
+                  >
+                    View saved CV →
+                  </a>
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* Upload Different CV */}
+          <div className="mt-5">
+
+            <label className="text-sm font-medium text-slate-700">
+              Upload a different CV
+            </label>
+
+            <input
+              type="file"
+              name="cv"
+              accept=".pdf,.doc,.docx"
+              onChange={(event) => {
+                setUseSavedCv(false)
+                handleChange(event)
+              }}
+              className="mt-2 block w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm"
+            />
+
+            <p className="mt-2 text-xs text-slate-400">
+              PDF, DOC or DOCX.
+            </p>
+
+          </div>
+
         </div>
 
         {/* Error */}

@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { getProfile, updateProfile } from '../services/profileApi'
 
@@ -82,6 +81,7 @@ function Profile() {
 
       const profileData = {
         full_name: profile.fullName,
+        email: profile.email,
         phone: profile.phone,
         institution: profile.institution,
         course: profile.course,
@@ -183,9 +183,12 @@ function Profile() {
 
             <input
               type="email"
+              name="email"
               value={profile.email}
-              disabled
-              className="mt-2 w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none"
+              onChange={handleChange}
+              placeholder="example@email.com"
+              required
+              className="mt-2 w-full rounded-lg border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
             />
           </div>
 
@@ -390,4 +393,3 @@ function Profile() {
 }
 
 export default Profile
-
