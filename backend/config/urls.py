@@ -23,6 +23,11 @@ urlpatterns = [
     'api/accounts/',
     include('accounts.urls')
 ),
+
+path(
+    'api/employers/',
+    include('employers.urls')
+),
 ]
 
 urlpatterns += static(
