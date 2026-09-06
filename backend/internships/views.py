@@ -31,3 +31,13 @@ class EmployerInternshipCreateView(generics.CreateAPIView):
         serializer.save(
             employer=self.request.user
         )
+        
+class EmployerInternshipListView(generics.ListAPIView):
+
+    serializer_class = EmployerInternshipSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Internship.objects.filter(
+            employer=self.request.user
+        ).order_by('-created_at')        
