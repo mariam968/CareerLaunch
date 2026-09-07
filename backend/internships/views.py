@@ -50,4 +50,14 @@ class EmployerInternshipUpdateView(generics.UpdateAPIView):
     def get_queryset(self):
         return Internship.objects.filter(
             employer=self.request.user
-        )     
+        )    
+
+class EmployerInternshipDeleteView(generics.DestroyAPIView):
+
+    serializer_class = EmployerInternshipSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Internship.objects.filter(
+            employer=self.request.user
+        ) 
