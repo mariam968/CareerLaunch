@@ -40,4 +40,14 @@ class EmployerInternshipListView(generics.ListAPIView):
     def get_queryset(self):
         return Internship.objects.filter(
             employer=self.request.user
-        ).order_by('-created_at')        
+        ).order_by('-created_at')   
+
+class EmployerInternshipUpdateView(generics.UpdateAPIView):
+
+    serializer_class = EmployerInternshipSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Internship.objects.filter(
+            employer=self.request.user
+        )     

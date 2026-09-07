@@ -12,6 +12,14 @@ from .views import (
     EmployerInternshipListView,
 )
 
+from .views import (
+    InternshipListView,
+    InternshipDetailView,
+    EmployerInternshipCreateView,
+    EmployerInternshipListView,
+    EmployerInternshipUpdateView,
+)
+
 urlpatterns = [
     path(
         '',
@@ -36,4 +44,10 @@ urlpatterns = [
     EmployerInternshipListView.as_view(),
     name='employer-internship-list'
     ),
+
+    path(
+    'employer/<int:pk>/',
+    EmployerInternshipUpdateView.as_view(),
+    name='employer-internship-update'
+),
 ]
