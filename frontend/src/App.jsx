@@ -4,6 +4,8 @@ import { SavedInternshipsProvider } from './context/SavedInternshipsContext'
 
 import DashboardLayout from './layouts/DashboardLayout'
 
+import EmployerDashboard from "./pages/EmployerDashboard";
+
 import Dashboard from './pages/Dashboard'
 import Internships from './pages/Internships'
 import InternshipDetails from './pages/InternshipDetails'
@@ -64,6 +66,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+  path="/employer/dashboard"
+  element={<EmployerDashboard />}
+/>
 
           <Route
             path="/internships/:id"

@@ -1,17 +1,17 @@
 const API_URL = "http://127.0.0.1:8000/api/internships/employer/";
 
-function getHeaders() {
+function getAuthHeaders() {
   const token = localStorage.getItem("token");
 
   return {
     Authorization: `Token ${token}`,
-    "Content-Type": "application/json",
   };
 }
 
 export async function getEmployerInternships() {
   const response = await fetch(API_URL, {
-    headers: getHeaders(),
+    method: "GET",
+    headers: getAuthHeaders(),
   });
 
   const data = await response.json();
@@ -28,7 +28,10 @@ export async function createEmployerInternship(internshipData) {
     "http://127.0.0.1:8000/api/internships/employer/create/",
     {
       method: "POST",
-      headers: getHeaders(),
+      headers: {
+        ...getAuthHeaders(),
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(internshipData),
     },
   );
@@ -45,7 +48,10 @@ export async function createEmployerInternship(internshipData) {
 export async function updateEmployerInternship(id, internshipData) {
   const response = await fetch(`${API_URL}${id}/`, {
     method: "PATCH",
-    headers: getHeaders(),
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(internshipData),
   });
 
@@ -61,9 +67,7 @@ export async function updateEmployerInternship(id, internshipData) {
 export async function deleteEmployerInternship(id) {
   const response = await fetch(`${API_URL}${id}/delete/`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Token ${localStorage.getItem("token")}`,
-    },
+    headers: getAuthHeaders(),
   });
 
   if (!response.ok) {
