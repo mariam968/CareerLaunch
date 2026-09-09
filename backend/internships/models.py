@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -8,6 +9,14 @@ class Internship(models.Model):
         ('Hybrid', 'Hybrid'),
         ('Remote', 'Remote'),
     ]
+
+    employer = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='internships',
+        null=True,
+        blank=True
+    )
 
     title = models.CharField(max_length=200)
     company = models.CharField(max_length=200)
