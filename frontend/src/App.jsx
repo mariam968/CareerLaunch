@@ -6,6 +6,8 @@ import DashboardLayout from './layouts/DashboardLayout'
 
 import EmployerDashboard from "./pages/EmployerDashboard";
 
+import EmployerLogin from "./pages/EmployerLogin";
+
 import Dashboard from './pages/Dashboard'
 import Internships from './pages/Internships'
 import InternshipDetails from './pages/InternshipDetails'
@@ -55,6 +57,12 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+
+          <Route
+  path="/employer/login"
+  element={<EmployerLogin />}
+/>
 
           <Route
             path="/internships"
