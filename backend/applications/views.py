@@ -3,7 +3,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Application
-from .serializers import ApplicationSerializer
+from .serializers import (
+    ApplicationSerializer,
+    EmployerApplicationSerializer,
+)
+from internships.models import Internship
 
 
 class ApplicationCreateView(generics.CreateAPIView):
@@ -63,3 +67,14 @@ class ApplicationListView(generics.ListAPIView):
         return Application.objects.filter(
             student=self.request.user
         ).select_related('internship').order_by('-applied_at')
+
+class EmployerApplicationListView(generics.ListAPIView):
+    serializer_class = EmployerApplicationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Application.objects.filter(
+            internship__employer=self.request.user
+        ).select_related(
+            'internship'
+        ).order_by('-applied_at')

@@ -43,3 +43,49 @@ class ApplicationSerializer(serializers.ModelSerializer):
             'status',
             'applied_at',
         ]
+
+class EmployerApplicationSerializer(serializers.ModelSerializer):
+    internship_title = serializers.CharField(
+        source='internship.title',
+        read_only=True
+    )
+
+    company = serializers.CharField(
+        source='internship.company',
+        read_only=True
+    )
+
+class Meta:
+        model = Application
+        fields = [
+            'id',
+            'internship',
+            'internship_title',
+            'company',
+            'full_name',
+            'email',
+            'phone',
+            'institution',
+            'course',
+            'year_of_study',
+            'cover_letter',
+            'cv',
+            'status',
+            'applied_at',
+        ]
+
+        read_only_fields = [
+            'id',
+            'internship',
+            'internship_title',
+            'company',
+            'full_name',
+            'email',
+            'phone',
+            'institution',
+            'course',
+            'year_of_study',
+            'cover_letter',
+            'cv',
+            'applied_at',
+        ]

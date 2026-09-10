@@ -1,6 +1,10 @@
 from django.urls import path
 
-from .views import ApplicationCreateView, ApplicationListView
+from .views import (
+    ApplicationCreateView,
+    ApplicationListView,
+    EmployerApplicationListView,
+)
 
 
 urlpatterns = [
@@ -15,4 +19,10 @@ urlpatterns = [
         ApplicationCreateView.as_view(),
         name='application-create'
     ),
+
+    path(
+    'employer/',
+    EmployerApplicationListView.as_view(),
+    name='employer-application-list'
+),
 ]
