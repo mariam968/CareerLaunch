@@ -8,6 +8,8 @@ import EmployerDashboard from "./pages/EmployerDashboard";
 
 import EmployerLogin from "./pages/EmployerLogin";
 
+import EmployerCreateInternship from "./pages/EmployerCreateInternship";
+
 import Dashboard from './pages/Dashboard'
 import Internships from './pages/Internships'
 import InternshipDetails from './pages/InternshipDetails'
@@ -78,6 +80,11 @@ function App() {
           <Route
   path="/employer/dashboard"
   element={<EmployerDashboard />}
+/>
+
+            <Route
+  path="/employer/internships/create"
+  element={<EmployerCreateInternship />}
 />
 
           <Route
