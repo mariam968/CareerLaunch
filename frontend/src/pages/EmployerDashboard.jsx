@@ -73,6 +73,14 @@ function EmployerDashboard() {
         >
           + Post Internship
         </button>
+           <button
+    onClick={() => {
+      window.location.href = "/employer/applicants";
+    }}
+    style={{ marginLeft: "10px" }}
+  >
+    View Applicants
+     </button>
       </div>
 
       <hr />
