@@ -205,6 +205,16 @@ function EmployerDashboard() {
           >
             Post Your First Internship
           </button>
+
+          <button
+  onClick={() => {
+    window.location.href =
+      "/employer/profile";
+  }}
+  style={{ marginLeft: "10px" }}
+>
+  Company Profile
+</button>
         </div>
       ) : (
         <div>

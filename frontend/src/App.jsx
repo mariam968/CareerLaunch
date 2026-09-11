@@ -14,6 +14,8 @@ import EmployerEditInternship from "./pages/EmployerEditInternship";
 
 import EmployerApplicants from "./pages/EmployerApplicants";
 
+import EmployerProfile from "./pages/EmployerProfile";
+
 
 
 import Dashboard from './pages/Dashboard'
@@ -91,6 +93,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+  path="/employer/profile"
+  element={<EmployerProfile />}
+/>
 
           <Route
   path="/employer/dashboard"
