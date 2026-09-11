@@ -4,22 +4,39 @@ import {
   deleteEmployerInternship,
 } from "../services/employerApi";
 
+import {
+  getEmployerDashboardStats,
+} from "../services/employerDashboardApi";
+
 function EmployerDashboard() {
   const [internships, setInternships] = useState([]);
+
+  const [stats, setStats] = useState({
+    total_internships: 0,
+    total_applicants: 0,
+    accepted_applicants: 0,
+    pending_applicants: 0,
+  });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    loadInternships();
+    loadDashboard();
   }, []);
 
-  async function loadInternships() {
+  async function loadDashboard() {
     try {
       setLoading(true);
       setError("");
 
-      const data = await getEmployerInternships();
-      setInternships(data);
+      const [internshipData, statsData] = await Promise.all([
+        getEmployerInternships(),
+        getEmployerDashboardStats(),
+      ]);
+
+      setInternships(internshipData);
+      setStats(statsData);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -37,18 +54,30 @@ function EmployerDashboard() {
     }
 
     try {
+      setError("");
+
       await deleteEmployerInternship(id);
 
       setInternships((current) =>
-        current.filter((internship) => internship.id !== id)
+        current.filter(
+          (internship) => internship.id !== id
+        )
       );
+
+      setStats((current) => ({
+        ...current,
+        total_internships: Math.max(
+          0,
+          current.total_internships - 1
+        ),
+      }));
     } catch (err) {
       setError(err.message);
     }
   }
 
   if (loading) {
-    return <p>Loading your internships...</p>;
+    return <p>Loading your dashboard...</p>;
   }
 
   return (
@@ -56,7 +85,8 @@ function EmployerDashboard() {
       <h1>Employer Dashboard</h1>
 
       <p>
-        Manage your internship opportunities from one place.
+        Manage your internship opportunities and
+        applicants from one place.
       </p>
 
       {error && (
@@ -65,79 +95,180 @@ function EmployerDashboard() {
         </p>
       )}
 
-      <div>
+      {/* Dashboard Statistics */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "20px",
+          margin: "30px 0",
+        }}
+      >
+        <div
+          style={{
+            border: "1px solid #ddd",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <h3>Total Internships</h3>
+
+          <h2>
+            {stats.total_internships}
+          </h2>
+        </div>
+
+        <div
+          style={{
+            border: "1px solid #ddd",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <h3>Total Applicants</h3>
+
+          <h2>
+            {stats.total_applicants}
+          </h2>
+        </div>
+
+        <div
+          style={{
+            border: "1px solid #ddd",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <h3>Pending</h3>
+
+          <h2>
+            {stats.pending_applicants}
+          </h2>
+        </div>
+
+        <div
+          style={{
+            border: "1px solid #ddd",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <h3>Accepted</h3>
+
+          <h2>
+            {stats.accepted_applicants}
+          </h2>
+        </div>
+      </div>
+
+      {/* Dashboard Actions */}
+      <div style={{ marginBottom: "30px" }}>
         <button
           onClick={() => {
-            window.location.href = "/employer/internships/create";
+            window.location.href =
+              "/employer/internships/create";
           }}
         >
           + Post Internship
         </button>
-           <button
-    onClick={() => {
-      window.location.href = "/employer/applicants";
-    }}
-    style={{ marginLeft: "10px" }}
-  >
-    View Applicants
-     </button>
+
+        <button
+          onClick={() => {
+            window.location.href =
+              "/employer/applicants";
+          }}
+          style={{ marginLeft: "10px" }}
+        >
+          View Applicants
+        </button>
       </div>
 
       <hr />
 
+      {/* Internships */}
       <h2>My Internships</h2>
 
       {internships.length === 0 ? (
-        <p>You haven't posted any internships yet.</p>
-      ) : (
-        internships.map((internship) => (
-          <div
-            key={internship.id}
-            style={{
-              border: "1px solid #ddd",
-              padding: "20px",
-              marginBottom: "15px",
-              borderRadius: "8px",
+        <div>
+          <h3>You haven't posted any internships yet.</h3>
+
+          <p>
+            Create your first internship opportunity
+            to start receiving applications.
+          </p>
+
+          <button
+            onClick={() => {
+              window.location.href =
+                "/employer/internships/create";
             }}
           >
-            <h3>{internship.title}</h3>
-
-            <p>
-              <strong>Company:</strong> {internship.company}
-            </p>
-
-            <p>
-              <strong>Location:</strong> {internship.location}
-            </p>
-
-            <p>
-              <strong>Type:</strong> {internship.internship_type}
-            </p>
-
-            <p>
-              <strong>Category:</strong> {internship.category}
-            </p>
-
-            <p>
-              <strong>Deadline:</strong> {internship.deadline}
-            </p>
-
-            <button
-              onClick={() =>
-                (window.location.href = `/employer/internships/edit/${internship.id}`)
-              }
+            Post Your First Internship
+          </button>
+        </div>
+      ) : (
+        <div>
+          {internships.map((internship) => (
+            <div
+              key={internship.id}
+              style={{
+                border: "1px solid #ddd",
+                padding: "20px",
+                marginBottom: "15px",
+                borderRadius: "8px",
+              }}
             >
-              Edit
-            </button>
+              <h3>{internship.title}</h3>
 
-            <button
-              onClick={() => handleDelete(internship.id)}
-              style={{ marginLeft: "10px" }}
-            >
-              Delete
-            </button>
-          </div>
-        ))
+              <p>
+                <strong>Company:</strong>{" "}
+                {internship.company}
+              </p>
+
+              <p>
+                <strong>Location:</strong>{" "}
+                {internship.location}
+              </p>
+
+              <p>
+                <strong>Type:</strong>{" "}
+                {internship.internship_type}
+              </p>
+
+              <p>
+                <strong>Category:</strong>{" "}
+                {internship.category}
+              </p>
+
+              <p>
+                <strong>Deadline:</strong>{" "}
+                {internship.deadline}
+              </p>
+
+              <div style={{ marginTop: "15px" }}>
+                <button
+                  onClick={() =>
+                    (window.location.href =
+                      `/employer/internships/edit/${internship.id}`)
+                  }
+                >
+                  Edit
+                </button>
+
+                <button
+                  onClick={() =>
+                    handleDelete(internship.id)
+                  }
+                  style={{
+                    marginLeft: "10px",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );

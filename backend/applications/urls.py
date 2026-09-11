@@ -5,6 +5,7 @@ from .views import (
     ApplicationListView,
     EmployerApplicationListView,
     EmployerApplicationStatusUpdateView,
+    EmployerDashboardStatsView,
 )
 
 
@@ -31,5 +32,11 @@ path(
     'employer/<int:pk>/status/',
     EmployerApplicationStatusUpdateView.as_view(),
     name='employer-application-status'
+),
+
+path(
+    'employer/stats/',
+    EmployerDashboardStatsView.as_view(),
+    name='employer-dashboard-stats'
 ),
 ]

@@ -1,7 +1,8 @@
+from django.db.models import Count
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
 from .models import Application
 from .serializers import (
     ApplicationSerializer,
@@ -116,3 +117,36 @@ class EmployerApplicationStatusUpdateView(generics.UpdateAPIView):
         serializer = self.get_serializer(application)
 
         return Response(serializer.data)
+
+
+class EmployerDashboardStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        total_internships = Internship.objects.filter(
+            employer=request.user
+        ).count()
+
+        total_applicants = Application.objects.filter(
+            internship__employer=request.user
+        ).count()
+
+        accepted_applicants = Application.objects.filter(
+            internship__employer=request.user,
+            status='Accepted'
+        ).count()
+
+        pending_applicants = Application.objects.filter(
+            internship__employer=request.user,
+            status__in=[
+                'Applied',
+                'Under Review',
+            ]
+        ).count()
+
+        return Response({
+            'total_internships': total_internships,
+            'total_applicants': total_applicants,
+            'accepted_applicants': accepted_applicants,
+            'pending_applicants': pending_applicants,
+        })
