@@ -16,12 +16,10 @@ class EmployerRegistrationSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=20)
     location = serializers.CharField(max_length=100)
     industry = serializers.CharField(max_length=100)
-
     description = serializers.CharField(
         required=False,
         allow_blank=True
     )
-
     website = serializers.URLField(
         required=False,
         allow_blank=True
@@ -32,7 +30,6 @@ class EmployerRegistrationSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'This username is already taken.'
             )
-
         return value
 
     def validate_email(self, value):
@@ -40,7 +37,6 @@ class EmployerRegistrationSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'An account with this email already exists.'
             )
-
         return value
 
     def create(self, validated_data):
@@ -57,8 +53,13 @@ class EmployerRegistrationSerializer(serializers.Serializer):
             phone=validated_data['phone'],
             location=validated_data['location'],
             industry=validated_data['industry'],
-            description=validated_data.get('description', ''),
-            website=validated_data.get('website') or None,
+            description=validated_data.get(
+                'description',
+                ''
+            ),
+            website=validated_data.get(
+                'website'
+            ) or None,
         )
 
         return {
@@ -68,11 +69,75 @@ class EmployerRegistrationSerializer(serializers.Serializer):
             'phone': validated_data['phone'],
             'location': validated_data['location'],
             'industry': validated_data['industry'],
-            'description': validated_data.get('description', ''),
-            'website': validated_data.get('website') or '',
+            'description': validated_data.get(
+                'description',
+                ''
+            ),
+            'website': validated_data.get(
+                'website'
+            ) or '',
         }
+
+
 class EmployerLoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(
         write_only=True
     )
+
+
+class EmployerProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        source='user.email',
+        required=False,
+        allow_blank=True
+    )
+
+    class Meta:
+        model = EmployerProfile
+
+        fields = [
+            'id',
+            'company_name',
+            'email',
+            'phone',
+            'location',
+            'industry',
+            'description',
+            'website',
+            'created_at',
+            'updated_at',
+        ]
+
+        read_only_fields = [
+            'id',
+            'created_at',
+            'updated_at',
+        ]
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop(
+            'user',
+            {}
+        )
+
+        email = user_data.get('email')
+
+        if email is not None:
+            instance.user.email = email
+            instance.user.save(
+                update_fields=['email']
+            )
+
+            instance.company_email = email
+
+        for attribute, value in validated_data.items():
+            setattr(
+                instance,
+                attribute,
+                value
+            )
+
+        instance.save()
+
+        return instance

@@ -3,6 +3,7 @@ from django.urls import path
 from .views import (
     EmployerRegistrationView,
     EmployerLoginView,
+    EmployerProfileView,
 )
 
 
@@ -17,5 +18,11 @@ urlpatterns = [
         'login/',
         EmployerLoginView.as_view(),
         name='employer-login'
+    ),
+
+    path(
+        'profile/',
+        EmployerProfileView.as_view(),
+        name='employer-profile'
     ),
 ]
