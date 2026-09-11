@@ -150,3 +150,17 @@ class EmployerDashboardStatsView(APIView):
             'accepted_applicants': accepted_applicants,
             'pending_applicants': pending_applicants,
         })
+
+class EmployerInternshipApplicantsView(generics.ListAPIView):
+    serializer_class = EmployerApplicationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        internship_id = self.kwargs['internship_id']
+
+        return Application.objects.filter(
+            internship_id=internship_id,
+            internship__employer=self.request.user
+        ).select_related(
+            'internship'
+        ).order_by('-applied_at')

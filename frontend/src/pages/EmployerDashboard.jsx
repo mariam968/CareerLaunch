@@ -266,6 +266,16 @@ function EmployerDashboard() {
                 </button>
 
                 <button
+  onClick={() =>
+    (window.location.href =
+      `/employer/internships/${internship.id}/applicants`)
+  }
+  style={{ marginLeft: "10px" }}
+>
+  View Applicants
+</button>
+
+                <button
                   onClick={() =>
                     handleDelete(internship.id)
                   }

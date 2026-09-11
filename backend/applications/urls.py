@@ -6,6 +6,7 @@ from .views import (
     EmployerApplicationListView,
     EmployerApplicationStatusUpdateView,
     EmployerDashboardStatsView,
+    EmployerInternshipApplicantsView,
 )
 
 
@@ -38,5 +39,11 @@ path(
     'employer/stats/',
     EmployerDashboardStatsView.as_view(),
     name='employer-dashboard-stats'
+),
+
+path(
+    'employer/internship/<int:internship_id>/',
+    EmployerInternshipApplicantsView.as_view(),
+    name='employer-internship-applicants'
 ),
 ]
