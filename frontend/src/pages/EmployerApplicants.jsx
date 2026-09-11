@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getEmployerApplications } from "../services/employerApplicationsApi";
+import {
+  getEmployerApplications,
+  updateApplicationStatus,
+} from "../services/employerApplicationsApi";
 
 function EmployerApplicants() {
   const [applications, setApplications] = useState([]);
@@ -24,6 +27,27 @@ function EmployerApplicants() {
     }
   }
 
+  async function handleStatusChange(applicationId, newStatus) {
+    try {
+      setError("");
+
+      const updatedApplication = await updateApplicationStatus(
+        applicationId,
+        newStatus
+      );
+
+      setApplications((current) =>
+        current.map((application) =>
+          application.id === applicationId
+            ? updatedApplication
+            : application
+        )
+      );
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   if (loading) {
     return <p>Loading applicants...</p>;
   }
@@ -45,6 +69,7 @@ function EmployerApplicants() {
       {applications.length === 0 ? (
         <div>
           <h2>No applicants yet</h2>
+
           <p>
             Applications from students will appear here.
           </p>
@@ -93,10 +118,46 @@ function EmployerApplicants() {
                 {application.year_of_study}
               </p>
 
-              <p>
-                <strong>Status:</strong>{" "}
-                {application.status}
-              </p>
+              <div>
+                <strong>Status:</strong>
+
+                <select
+                  value={application.status}
+                  onChange={(event) =>
+                    handleStatusChange(
+                      application.id,
+                      event.target.value
+                    )
+                  }
+                  style={{
+                    marginLeft: "10px",
+                  }}
+                >
+                  <option value="Applied">
+                    Applied
+                  </option>
+
+                  <option value="Under Review">
+                    Under Review
+                  </option>
+
+                  <option value="Shortlisted">
+                    Shortlisted
+                  </option>
+
+                  <option value="Interview">
+                    Interview
+                  </option>
+
+                  <option value="Accepted">
+                    Accepted
+                  </option>
+
+                  <option value="Rejected">
+                    Rejected
+                  </option>
+                </select>
+              </div>
 
               <p>
                 <strong>Applied:</strong>{" "}
