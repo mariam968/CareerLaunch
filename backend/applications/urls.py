@@ -4,6 +4,7 @@ from .views import (
     ApplicationCreateView,
     ApplicationListView,
     EmployerApplicationListView,
+    EmployerApplicationStatusUpdateView,
 )
 
 
@@ -24,5 +25,11 @@ urlpatterns = [
     'employer/',
     EmployerApplicationListView.as_view(),
     name='employer-application-list'
+),
+
+path(
+    'employer/<int:pk>/status/',
+    EmployerApplicationStatusUpdateView.as_view(),
+    name='employer-application-status'
 ),
 ]

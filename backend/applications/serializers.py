@@ -55,7 +55,7 @@ class EmployerApplicationSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-class Meta:
+    class Meta:
         model = Application
         fields = [
             'id',

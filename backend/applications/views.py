@@ -78,3 +78,41 @@ class EmployerApplicationListView(generics.ListAPIView):
         ).select_related(
             'internship'
         ).order_by('-applied_at')
+
+class EmployerApplicationStatusUpdateView(generics.UpdateAPIView):
+    serializer_class = EmployerApplicationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Application.objects.filter(
+            internship__employer=self.request.user
+        )
+
+    def update(self, request, *args, **kwargs):
+        application = self.get_object()
+
+        new_status = request.data.get('status')
+
+        valid_statuses = [
+            'Applied',
+            'Under Review',
+            'Shortlisted',
+            'Interview',
+            'Accepted',
+            'Rejected',
+        ]
+
+        if new_status not in valid_statuses:
+            return Response(
+                {
+                    'detail': 'Invalid application status.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        application.status = new_status
+        application.save(update_fields=['status'])
+
+        serializer = self.get_serializer(application)
+
+        return Response(serializer.data)
