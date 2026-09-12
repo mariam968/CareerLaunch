@@ -18,6 +18,7 @@ class StudentRegistrationSerializer(serializers.Serializer):
     course = serializers.CharField(max_length=200)
     year_of_study = serializers.CharField(max_length=50)
     location = serializers.CharField(max_length=100)
+
     skills = serializers.CharField(
         required=False,
         allow_blank=True
@@ -57,7 +58,11 @@ class StudentRegistrationSerializer(serializers.Serializer):
             skills=validated_data.get('skills', ''),
         )
 
-        return user
+        return {
+            'username': user.username,
+            'email': user.email,
+            'full_name': validated_data['full_name'],
+        }
 
 
 class StudentProfileSerializer(serializers.ModelSerializer):

@@ -18,6 +18,8 @@ import EmployerProfile from "./pages/EmployerProfile";
 
 import EmployerInternshipApplicants from "./pages/EmployerInternshipApplicants";
 
+import Register from './pages/Register'
+
 
 
 import Dashboard from './pages/Dashboard'
@@ -78,6 +80,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+  path="/register"
+  element={<Register />}
+/>
 
 
           <Route

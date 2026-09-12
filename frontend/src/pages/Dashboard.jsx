@@ -1,154 +1,208 @@
-import { useEffect, useState } from 'react'
-import InternshipCard from '../components/InternshipCard'
+import { useEffect, useState } from "react";
 
 function Dashboard() {
-  const [greeting, setGreeting] = useState('Good morning')
+  const [greeting, setGreeting] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [profileCompletion, setProfileCompletion] = useState(0);
+  const [applicationCount, setApplicationCount] = useState(0);
 
   useEffect(() => {
-    const updateGreeting = () => {
-      const hour = new Date().getHours()
+    loadDashboard();
+  }, []);
 
-      if (hour >= 5 && hour < 12) {
-        setGreeting('Good morning')
-      } else if (hour >= 12 && hour < 17) {
-        setGreeting('Good afternoon')
-      } else {
-        setGreeting('Good evening')
-      }
+  const loadDashboard = async () => {
+    // -----------------------------
+    // Get student's name
+    // -----------------------------
+    const fullName = localStorage.getItem("full_name");
+
+    if (fullName) {
+      const name = fullName.trim().split(" ")[0];
+      setFirstName(name);
     }
 
-    updateGreeting()
+    // -----------------------------
+    // Set greeting
+    // -----------------------------
+    const hour = new Date().getHours();
 
-    const interval = setInterval(updateGreeting, 60000)
+    if (hour >= 5 && hour < 12) {
+      setGreeting("Good morning");
+    } else if (hour >= 12 && hour < 17) {
+      setGreeting("Good afternoon");
+    } else {
+      setGreeting("Good evening");
+    }
 
-    return () => clearInterval(interval)
-  }, [])
+    // -----------------------------
+    // Get authentication token
+    // -----------------------------
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      return;
+    }
+
+    // -----------------------------
+    // Get profile
+    // -----------------------------
+    try {
+      const profileResponse = await fetch(
+        "http://127.0.0.1:8000/api/accounts/profile/",
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+
+      if (profileResponse.ok) {
+        const profile = await profileResponse.json();
+
+        const fields = [
+          profile.full_name,
+          profile.email,
+          profile.phone,
+          profile.institution,
+          profile.course,
+          profile.year_of_study,
+          profile.location,
+          profile.skills,
+          profile.cv,
+        ];
+
+        const completedFields = fields.filter((field) => {
+          return (
+            field !== null &&
+            field !== undefined &&
+            String(field).trim() !== ""
+          );
+        }).length;
+
+        const percentage = Math.round(
+          (completedFields / fields.length) * 100
+        );
+
+        setProfileCompletion(percentage);
+      }
+    } catch (error) {
+      console.error("Profile error:", error);
+    }
+
+    // -----------------------------
+    // Get applications
+    // -----------------------------
+    try {
+      const applicationsResponse = await fetch(
+        "http://127.0.0.1:8000/api/applications/",
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+
+      if (applicationsResponse.ok) {
+        const applications = await applicationsResponse.json();
+
+        setApplicationCount(applications.length);
+      }
+    } catch (error) {
+      console.error("Applications error:", error);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 p-6">
 
-      {/* Welcome */}
+      {/* Welcome Section */}
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-slate-900">
-          {greeting}, Mariam 👋
-        </h2>
+        <h1 className="text-3xl font-bold text-slate-900">
+          {greeting},{" "}
+          {firstName || "Student"}{" "}
+          {greeting === "Good morning"
+            ? "☀️"
+            : greeting === "Good afternoon"
+            ? "🌤️"
+            : "🌙"}
+        </h1>
 
         <p className="mt-2 text-slate-500">
-          Find opportunities that launch your career.
+          Welcome back to CareerLaunch. Let's work towards your next
+          opportunity.
         </p>
       </div>
 
-      {/* Statistics */}
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+      {/* Dashboard Statistics */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 
         {/* Applications */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-500">
-              Applications
-            </p>
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-sm font-medium text-slate-500">
+            Applications
+          </h2>
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-              📄
-            </div>
-          </div>
+          <p className="mt-2 text-3xl font-bold text-slate-900">
+            {applicationCount}
+          </p>
 
-          <h3 className="mt-4 text-3xl font-bold text-slate-900">
-            12
-          </h3>
-
-          <p className="mt-1 text-xs text-slate-400">
-            Total applications
+          <p className="mt-1 text-sm text-slate-500">
+            Applications submitted
           </p>
         </div>
 
-        {/* Pending */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-500">
-              Pending
-            </p>
+        {/* Profile Completion */}
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="text-sm font-medium text-slate-500">
+            Profile
+          </h2>
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
-              ⏳
-            </div>
-          </div>
-
-          <h3 className="mt-4 text-3xl font-bold text-slate-900">
-            5
-          </h3>
-
-          <p className="mt-1 text-xs text-slate-400">
-            Applications awaiting review
+          <p className="mt-2 text-3xl font-bold text-blue-600">
+            {profileCompletion}%
           </p>
-        </div>
 
-        {/* Interviews */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-slate-500">
-              Interviews
-            </p>
-
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50 text-green-600">
-              ✓
-            </div>
-          </div>
-
-          <h3 className="mt-4 text-3xl font-bold text-slate-900">
-            2
-          </h3>
-
-          <p className="mt-1 text-xs text-slate-400">
-            Interviews scheduled
+          <p className="mt-1 text-sm text-slate-500">
+            Profile completion
           </p>
+
+          {/* Progress bar */}
+          <div className="mt-4 h-2 w-full rounded-full bg-slate-200">
+            <div
+              className="h-2 rounded-full bg-blue-600 transition-all duration-500"
+              style={{
+                width: `${profileCompletion}%`,
+              }}
+            ></div>
+          </div>
         </div>
 
       </div>
 
-      {/* Recommended internships */}
-      <section className="mt-10">
+      {/* Recommended Section */}
+      <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
 
-        <div className="mb-5 flex items-center justify-between">
+        <h2 className="text-xl font-bold text-slate-900">
+          Recommended for you
+        </h2>
 
-          <div>
-            <h2 className="text-xl font-bold text-slate-900">
-              Recommended Internships
-            </h2>
+        <p className="mt-2 text-slate-500">
+          Find internship opportunities that match your skills and
+          interests.
+        </p>
 
-            <p className="mt-1 text-sm text-slate-500">
-              Opportunities that may be a good match for you.
-            </p>
-          </div>
+        <button
+          onClick={() => {
+            window.location.href = "/internships";
+          }}
+          className="mt-5 rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
+        >
+          Browse Internships
+        </button>
 
-          <button className="rounded-lg px-3 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50 hover:text-blue-700">
-            View all →
-          </button>
-
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-
-          <InternshipCard
-            title="Software Developer Intern"
-            company="TechNova Uganda"
-            location="Kampala"
-            type="Full-time"
-          />
-
-          <InternshipCard
-            title="Frontend Developer Intern"
-            company="Digital Solutions Ltd"
-            location="Kampala"
-            type="Hybrid"
-          />
-
-        </div>
-
-      </section>
+      </div>
 
     </div>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

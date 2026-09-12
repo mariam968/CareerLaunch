@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
 
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
@@ -16,6 +17,30 @@ from .serializers import (
 class StudentRegistrationView(generics.CreateAPIView):
     serializer_class = StudentRegistrationSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        registration_data = serializer.save()
+
+        user = User.objects.get(
+            username=registration_data['username']
+        )
+
+        token, created = Token.objects.get_or_create(
+            user=user
+        )
+
+        return Response(
+            {
+                'token': token.key,
+                'username': user.username,
+                'email': user.email,
+                'full_name': registration_data['full_name'],
+            },
+            status=status.HTTP_201_CREATED
+        )
+
 
 class StudentLoginView(APIView):
 
@@ -30,16 +55,22 @@ class StudentLoginView(APIView):
 
         if user is None:
             return Response(
-                {'detail': 'Invalid username or password.'},
+                {
+                    'detail': 'Invalid username or password.'
+                },
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        token, created = Token.objects.get_or_create(user=user)
+        token, created = Token.objects.get_or_create(
+            user=user
+        )
 
-        return Response({
-            'token': token.key,
-            'username': user.username,
-        })
+        return Response(
+            {
+                'token': token.key,
+                'username': user.username,
+            }
+        )
 
 
 class StudentProfileView(generics.RetrieveUpdateAPIView):
