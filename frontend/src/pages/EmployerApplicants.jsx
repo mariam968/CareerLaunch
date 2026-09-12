@@ -48,145 +48,351 @@ function EmployerApplicants() {
     }
   }
 
+  function getStatusStyle(status) {
+    switch (status) {
+      case "Accepted":
+        return "bg-green-100 text-green-700 border-green-200";
+
+      case "Rejected":
+        return "bg-red-100 text-red-700 border-red-200";
+
+      case "Shortlisted":
+        return "bg-blue-100 text-blue-700 border-blue-200";
+
+      case "Interview":
+        return "bg-purple-100 text-purple-700 border-purple-200";
+
+      case "Under Review":
+        return "bg-amber-100 text-amber-700 border-amber-200";
+
+      default:
+        return "bg-slate-100 text-slate-600 border-slate-200";
+    }
+  }
+
   if (loading) {
-    return <p>Loading applicants...</p>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
+
+          <p className="text-sm font-medium text-slate-600">
+            Loading applicants...
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Applicants</h1>
+    <div className="min-h-screen bg-slate-50 px-6 py-8 md:px-10">
+      <div className="mx-auto max-w-6xl">
 
-      <p>
-        View students who have applied to your internships.
-      </p>
+        {/* Header */}
+        <div className="mb-8 rounded-2xl bg-blue-600 p-7 text-white shadow-lg">
+          <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
 
-      {error && (
-        <p style={{ color: "red" }}>
-          {error}
-        </p>
-      )}
-
-      {applications.length === 0 ? (
-        <div>
-          <h2>No applicants yet</h2>
-
-          <p>
-            Applications from students will appear here.
-          </p>
-        </div>
-      ) : (
-        <div>
-          {applications.map((application) => (
-            <div
-              key={application.id}
-              style={{
-                border: "1px solid #ddd",
-                padding: "20px",
-                marginBottom: "15px",
-                borderRadius: "8px",
-              }}
-            >
-              <h2>{application.full_name}</h2>
-
-              <p>
-                <strong>Internship:</strong>{" "}
-                {application.internship_title}
-              </p>
-
-              <p>
-                <strong>Email:</strong>{" "}
-                {application.email}
-              </p>
-
-              <p>
-                <strong>Phone:</strong>{" "}
-                {application.phone}
-              </p>
-
-              <p>
-                <strong>Institution:</strong>{" "}
-                {application.institution}
-              </p>
-
-              <p>
-                <strong>Course:</strong>{" "}
-                {application.course}
-              </p>
-
-              <p>
-                <strong>Year of Study:</strong>{" "}
-                {application.year_of_study}
-              </p>
-
-              <div>
-                <strong>Status:</strong>
-
-                <select
-                  value={application.status}
-                  onChange={(event) =>
-                    handleStatusChange(
-                      application.id,
-                      event.target.value
-                    )
-                  }
-                  style={{
-                    marginLeft: "10px",
-                  }}
-                >
-                  <option value="Applied">
-                    Applied
-                  </option>
-
-                  <option value="Under Review">
-                    Under Review
-                  </option>
-
-                  <option value="Shortlisted">
-                    Shortlisted
-                  </option>
-
-                  <option value="Interview">
-                    Interview
-                  </option>
-
-                  <option value="Accepted">
-                    Accepted
-                  </option>
-
-                  <option value="Rejected">
-                    Rejected
-                  </option>
-                </select>
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 text-2xl">
+                👥
               </div>
 
-              <p>
-                <strong>Applied:</strong>{" "}
-                {new Date(
-                  application.applied_at
-                ).toLocaleDateString()}
-              </p>
-
-              <h3>Cover Letter</h3>
-
-              <p>
-                {application.cover_letter}
-              </p>
-
-              {application.cv && (
-                <p>
-                  <a
-                    href={`http://127.0.0.1:8000${application.cv}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View CV
-                  </a>
+              <div>
+                <p className="text-sm font-medium text-blue-100">
+                  Employer Portal
                 </p>
-              )}
+
+                <h1 className="text-2xl font-bold md:text-3xl">
+                  Applicants
+                </h1>
+
+                <p className="mt-1 text-sm text-blue-100">
+                  Review and manage students who applied.
+                </p>
+              </div>
             </div>
-          ))}
+
+            <div className="rounded-xl bg-white/15 px-5 py-3 text-center">
+              <p className="text-2xl font-bold">
+                {applications.length}
+              </p>
+
+              <p className="text-xs text-blue-100">
+                Total Applicants
+              </p>
+            </div>
+
+          </div>
         </div>
-      )}
+
+        {/* Error */}
+        {error && (
+          <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
+            {error}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {applications.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-blue-200 bg-white p-10 text-center shadow-sm">
+
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-3xl">
+              👥
+            </div>
+
+            <h2 className="text-xl font-bold text-slate-900">
+              No applicants yet
+            </h2>
+
+            <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+              Applications from students will appear here
+              once they apply to your internships.
+            </p>
+
+            <button
+              onClick={() => {
+                window.location.href =
+                  "/employer/dashboard";
+              }}
+              className="mt-6 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+        ) : (
+
+          /* Applicants */
+          <div className="space-y-6">
+            {applications.map((application) => (
+              <div
+                key={application.id}
+                className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
+              >
+
+                {/* Applicant Header */}
+                <div className="border-b border-slate-100 bg-gradient-to-r from-blue-50 to-white p-6">
+                  <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+
+                    <div className="flex items-center gap-4">
+
+                      {/* Avatar */}
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xl font-bold text-white shadow-sm">
+                        {application.full_name
+                          ? application.full_name
+                              .charAt(0)
+                              .toUpperCase()
+                          : "S"}
+                      </div>
+
+                      <div>
+                        <h2 className="text-xl font-bold text-slate-900">
+                          {application.full_name}
+                        </h2>
+
+                        <p className="mt-1 text-sm font-medium text-blue-600">
+                          {application.internship_title}
+                        </p>
+                      </div>
+
+                    </div>
+
+                    {/* Status */}
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`rounded-full border px-3 py-1.5 text-xs font-bold ${getStatusStyle(
+                          application.status
+                        )}`}
+                      >
+                        {application.status}
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* Applicant Information */}
+                <div className="p-6">
+
+                  <div className="mb-6">
+                    <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-slate-400">
+                      Applicant Information
+                    </h3>
+
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+                      <div className="rounded-xl bg-slate-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                          Email
+                        </p>
+
+                        <p className="mt-1 break-words text-sm font-semibold text-slate-800">
+                          {application.email}
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl bg-slate-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                          Phone
+                        </p>
+
+                        <p className="mt-1 text-sm font-semibold text-slate-800">
+                          {application.phone}
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl bg-slate-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                          Institution
+                        </p>
+
+                        <p className="mt-1 text-sm font-semibold text-slate-800">
+                          {application.institution}
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl bg-slate-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                          Course
+                        </p>
+
+                        <p className="mt-1 text-sm font-semibold text-slate-800">
+                          {application.course}
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl bg-slate-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                          Year of Study
+                        </p>
+
+                        <p className="mt-1 text-sm font-semibold text-slate-800">
+                          {application.year_of_study}
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl bg-blue-50 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-blue-500">
+                          Applied
+                        </p>
+
+                        <p className="mt-1 text-sm font-semibold text-slate-800">
+                          {new Date(
+                            application.applied_at
+                          ).toLocaleDateString()}
+                        </p>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Status Management */}
+                  <div className="mb-6 rounded-xl border border-blue-100 bg-blue-50/50 p-5">
+                    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900">
+                          Application Status
+                        </h3>
+
+                        <p className="mt-1 text-xs text-slate-500">
+                          Update the applicant's progress.
+                        </p>
+                      </div>
+
+                      <select
+                        value={application.status}
+                        onChange={(event) =>
+                          handleStatusChange(
+                            application.id,
+                            event.target.value
+                          )
+                        }
+                        className="rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                      >
+                        <option value="Applied">
+                          Applied
+                        </option>
+
+                        <option value="Under Review">
+                          Under Review
+                        </option>
+
+                        <option value="Shortlisted">
+                          Shortlisted
+                        </option>
+
+                        <option value="Interview">
+                          Interview
+                        </option>
+
+                        <option value="Accepted">
+                          Accepted
+                        </option>
+
+                        <option value="Rejected">
+                          Rejected
+                        </option>
+                      </select>
+
+                    </div>
+                  </div>
+
+                  {/* Cover Letter */}
+                  <div className="mb-6">
+                    <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-900">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50">
+                        ✉️
+                      </span>
+
+                      Cover Letter
+                    </h3>
+
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
+                      <p className="whitespace-pre-line text-sm leading-7 text-slate-600">
+                        {application.cover_letter}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* CV */}
+                  {application.cv && (
+                    <div className="flex flex-col justify-between gap-4 rounded-xl border border-slate-200 bg-white p-5 sm:flex-row sm:items-center">
+
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-lg">
+                          📄
+                        </div>
+
+                        <div>
+                          <h3 className="text-sm font-bold text-slate-900">
+                            Curriculum Vitae
+                          </h3>
+
+                          <p className="text-xs text-slate-500">
+                            View the applicant's CV
+                          </p>
+                        </div>
+                      </div>
+
+                      <a
+                        href={`http://127.0.0.1:8000${application.cv}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-xl bg-blue-600 px-5 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
+                      >
+                        View CV
+                      </a>
+
+                    </div>
+                  )}
+
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }
