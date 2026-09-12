@@ -4,15 +4,16 @@ import { getInternships } from '../services/internshipApi'
 
 function Internships() {
   const [internships, setInternships] = useState([])
+
   const [search, setSearch] = useState('')
   const [locationFilter, setLocationFilter] = useState('All')
   const [typeFilter, setTypeFilter] = useState('All')
   const [categoryFilter, setCategoryFilter] = useState('All')
+  const [sortBy, setSortBy] = useState('newest')
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // Load internships from Django
   useEffect(() => {
     async function loadInternships() {
       try {
@@ -20,7 +21,7 @@ function Internships() {
 
         const data = await getInternships()
 
-        setInternships(data)
+        setInternships(Array.isArray(data) ? data : [])
         setError('')
       } catch (err) {
         console.error(err)
@@ -33,49 +34,49 @@ function Internships() {
     loadInternships()
   }, [])
 
-  // Get unique locations
+  // Unique locations
   const locations = useMemo(() => {
-    return [
-      'All',
-      ...new Set(
-        internships.map((internship) => internship.location)
-      ),
-    ]
+    const values = internships
+      .map((internship) => internship.location)
+      .filter(Boolean)
+
+    return ['All', ...new Set(values)]
   }, [internships])
 
-  // Get unique internship types
+  // Unique internship types
   const types = useMemo(() => {
-    return [
-      'All',
-      ...new Set(
-        internships.map(
-          (internship) => internship.internship_type
-        )
-      ),
-    ]
+    const values = internships
+      .map((internship) => internship.internship_type)
+      .filter(Boolean)
+
+    return ['All', ...new Set(values)]
   }, [internships])
 
-  // Get unique categories
+  // Unique categories
   const categories = useMemo(() => {
-    return [
-      'All',
-      ...new Set(
-        internships.map(
-          (internship) => internship.category
-        )
-      ),
-    ]
+    const values = internships
+      .map((internship) => internship.category)
+      .filter(Boolean)
+
+    return ['All', ...new Set(values)]
   }, [internships])
 
-  // Filter internships
-  const filteredInternships = internships.filter(
-    (internship) => {
-      const searchText = search.toLowerCase()
+  // Filter and sort internships
+  const filteredInternships = useMemo(() => {
+    const searchText = search.trim().toLowerCase()
+
+    const results = internships.filter((internship) => {
+      const title = internship.title?.toLowerCase() || ''
+      const company = internship.company?.toLowerCase() || ''
+      const category = internship.category?.toLowerCase() || ''
+      const location = internship.location?.toLowerCase() || ''
 
       const matchesSearch =
-        internship.title.toLowerCase().includes(searchText) ||
-        internship.company.toLowerCase().includes(searchText) ||
-        internship.category.toLowerCase().includes(searchText)
+        !searchText ||
+        title.includes(searchText) ||
+        company.includes(searchText) ||
+        category.includes(searchText) ||
+        location.includes(searchText)
 
       const matchesLocation =
         locationFilter === 'All' ||
@@ -95,15 +96,55 @@ function Internships() {
         matchesType &&
         matchesCategory
       )
-    }
-  )
+    })
+
+    return [...results].sort((a, b) => {
+      if (sortBy === 'deadline') {
+        if (!a.deadline) return 1
+        if (!b.deadline) return -1
+
+        return (
+          new Date(a.deadline) -
+          new Date(b.deadline)
+        )
+      }
+
+      if (sortBy === 'oldest') {
+        return (
+          new Date(a.created_at) -
+          new Date(b.created_at)
+        )
+      }
+
+      // Newest
+      return (
+        new Date(b.created_at) -
+        new Date(a.created_at)
+      )
+    })
+  }, [
+    internships,
+    search,
+    locationFilter,
+    typeFilter,
+    categoryFilter,
+    sortBy,
+  ])
 
   const clearFilters = () => {
     setSearch('')
     setLocationFilter('All')
     setTypeFilter('All')
     setCategoryFilter('All')
+    setSortBy('newest')
   }
+
+  const filtersActive =
+    search !== '' ||
+    locationFilter !== 'All' ||
+    typeFilter !== 'All' ||
+    categoryFilter !== 'All' ||
+    sortBy !== 'newest'
 
   // Loading state
   if (loading) {
@@ -283,7 +324,7 @@ function Internships() {
                 </h2>
 
                 <p className="text-sm text-slate-500">
-                  Narrow down opportunities to find the best match.
+                  Find opportunities that match your interests.
                 </p>
               </div>
 
@@ -312,7 +353,7 @@ function Internships() {
                   onChange={(event) =>
                     setSearch(event.target.value)
                   }
-                  placeholder="Search by title, company or category..."
+                  placeholder="Search by title, company, category or location..."
                   className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                 />
 
@@ -321,11 +362,10 @@ function Internships() {
             </div>
 
             {/* Filters */}
-            <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
+            <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
               {/* Location */}
               <div>
-
                 <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   📍 Location
                 </label>
@@ -343,12 +383,10 @@ function Internships() {
                     </option>
                   ))}
                 </select>
-
               </div>
 
               {/* Internship Type */}
               <div>
-
                 <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   💼 Internship Type
                 </label>
@@ -366,12 +404,10 @@ function Internships() {
                     </option>
                   ))}
                 </select>
-
               </div>
 
               {/* Category */}
               <div>
-
                 <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
                   🏷️ Category
                 </label>
@@ -389,7 +425,33 @@ function Internships() {
                     </option>
                   ))}
                 </select>
+              </div>
 
+              {/* Sort */}
+              <div>
+                <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                  ↕️ Sort by
+                </label>
+
+                <select
+                  value={sortBy}
+                  onChange={(event) =>
+                    setSortBy(event.target.value)
+                  }
+                  className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                >
+                  <option value="newest">
+                    Newest first
+                  </option>
+
+                  <option value="deadline">
+                    Closing soon
+                  </option>
+
+                  <option value="oldest">
+                    Oldest first
+                  </option>
+                </select>
               </div>
 
             </div>
@@ -409,13 +471,15 @@ function Internships() {
                 opportunities
               </p>
 
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
-              >
-                ↻ Clear Filters
-              </button>
+              {filtersActive && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+                >
+                  ↻ Clear Filters
+                </button>
+              )}
 
             </div>
 
@@ -448,7 +512,7 @@ function Internships() {
 
           </div>
 
-          {/* Empty State */}
+          {/* Empty state */}
           {filteredInternships.length === 0 ? (
 
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm sm:p-14">
@@ -462,8 +526,9 @@ function Internships() {
               </h3>
 
               <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
-                We couldn't find opportunities matching your current
-                search or filters. Try changing your search criteria.
+                We couldn't find opportunities matching your
+                current search or filters. Try changing your
+                search criteria.
               </p>
 
               <button
@@ -478,7 +543,6 @@ function Internships() {
 
           ) : (
 
-            /* Internship Cards */
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 
               {filteredInternships.map((internship) => (

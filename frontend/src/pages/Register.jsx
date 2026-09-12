@@ -9,7 +9,6 @@ function Register() {
     email: "",
     password: "",
     password2: "",
-
     full_name: "",
     phone: "",
     institution: "",
@@ -37,12 +36,26 @@ function Register() {
     setError("");
     setLoading(true);
 
-    // Check passwords
     if (formData.password !== formData.password2) {
       setError("Passwords do not match.");
       setLoading(false);
       return;
     }
+
+    const registrationData = {
+      username: formData.username,
+      email: formData.email,
+      password: formData.password,
+      full_name: formData.full_name,
+      phone: formData.phone,
+      institution: formData.institution,
+      course: formData.course,
+      year_of_study: formData.year_of_study,
+      location: formData.location,
+      skills: formData.skills,
+    };
+
+    console.log("Registration data:", registrationData);
 
     try {
       const response = await fetch(
@@ -52,37 +65,12 @@ function Register() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            username: formData.username,
-            email: formData.email,
-            password: formData.password,
-            full_name: formData.full_name,
-            phone: formData.phone,
-            institution: formData.institution,
-            course: formData.course,
-            year_of_study: formData.year_of_study,
-            location: formData.location,
-            skills: formData.skills,
-          }),
+          body: JSON.stringify(registrationData),
         }
       );
 
-      // Read the response as text first
-      const text = await response.text();
+      const data = await response.json();
 
-      let data;
-
-      try {
-        data = JSON.parse(text);
-      } catch {
-        console.error("Server returned:", text);
-
-        throw new Error(
-          "The server returned an unexpected response. Please try again."
-        );
-      }
-
-      // Handle Django errors
       if (!response.ok) {
         const firstError = Object.values(data)[0];
 
@@ -97,14 +85,21 @@ function Register() {
         );
       }
 
-      // Save authentication information
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("full_name", data.full_name);
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+      }
 
-      // Go directly to dashboard
+      if (data.username) {
+        localStorage.setItem("username", data.username);
+      }
+
+      if (data.full_name) {
+        localStorage.setItem("full_name", data.full_name);
+      } else {
+        localStorage.setItem("full_name", formData.full_name);
+      }
+
       navigate("/");
-
     } catch (error) {
       console.error("Registration error:", error);
       setError(error.message);
@@ -115,7 +110,6 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
-
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
 
         {/* Header */}
@@ -325,29 +319,12 @@ function Register() {
                   required
                   className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
                 >
-                  <option value="">
-                    Select your year
-                  </option>
-
-                  <option value="Year 1">
-                    Year 1
-                  </option>
-
-                  <option value="Year 2">
-                    Year 2
-                  </option>
-
-                  <option value="Year 3">
-                    Year 3
-                  </option>
-
-                  <option value="Year 4">
-                    Year 4
-                  </option>
-
-                  <option value="Year 5">
-                    Year 5
-                  </option>
+                  <option value="">Select your year</option>
+                  <option value="Year 1">Year 1</option>
+                  <option value="Year 2">Year 2</option>
+                  <option value="Year 3">Year 3</option>
+                  <option value="Year 4">Year 4</option>
+                  <option value="Year 5">Year 5</option>
                 </select>
               </div>
 

@@ -1,9 +1,11 @@
-const API_URL = "http://127.0.0.1:8000/api/accounts/profile/";
+import { API_URL } from "./api";
+
+const PROFILE_URL = `${API_URL}/api/accounts/profile/`;
 
 export async function getProfile() {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(API_URL, {
+  const response = await fetch(PROFILE_URL, {
     headers: {
       Authorization: `Token ${token}`,
     },
@@ -29,7 +31,7 @@ export async function updateProfile(profileData) {
     }
   });
 
-  const response = await fetch(API_URL, {
+  const response = await fetch(PROFILE_URL, {
     method: "PATCH",
     headers: {
       Authorization: `Token ${token}`,

@@ -1,7 +1,9 @@
-const API_URL = "http://127.0.0.1:8000/api/internships/";
+import { API_URL } from "./api";
+
+const INTERNSHIPS_URL = `${API_URL}/api/internships/`;
 
 export async function getInternships() {
-  const response = await fetch(API_URL);
+  const response = await fetch(INTERNSHIPS_URL);
 
   const data = await response.json();
 
@@ -13,7 +15,7 @@ export async function getInternships() {
 }
 
 export async function getInternship(id) {
-  const response = await fetch(`${API_URL}${id}/`);
+  const response = await fetch(`${INTERNSHIPS_URL}${id}/`);
 
   const data = await response.json();
 

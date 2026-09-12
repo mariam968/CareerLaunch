@@ -1,4 +1,6 @@
-const API_URL = "http://127.0.0.1:8000/api/internships/employer/";
+import { API_URL } from "./api";
+
+const EMPLOYER_URL = `${API_URL}/api/internships/employer/`;
 
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
@@ -9,7 +11,7 @@ function getAuthHeaders() {
 }
 
 export async function getEmployerInternships() {
-  const response = await fetch(API_URL, {
+  const response = await fetch(EMPLOYER_URL, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -24,17 +26,14 @@ export async function getEmployerInternships() {
 }
 
 export async function createEmployerInternship(internshipData) {
-  const response = await fetch(
-    "http://127.0.0.1:8000/api/internships/employer/create/",
-    {
-      method: "POST",
-      headers: {
-        ...getAuthHeaders(),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(internshipData),
+  const response = await fetch(`${EMPLOYER_URL}create/`, {
+    method: "POST",
+    headers: {
+      ...getAuthHeaders(),
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify(internshipData),
+  });
 
   const data = await response.json();
 
@@ -46,7 +45,7 @@ export async function createEmployerInternship(internshipData) {
 }
 
 export async function updateEmployerInternship(id, internshipData) {
-  const response = await fetch(`${API_URL}${id}/`, {
+  const response = await fetch(`${EMPLOYER_URL}${id}/`, {
     method: "PATCH",
     headers: {
       ...getAuthHeaders(),
@@ -65,7 +64,7 @@ export async function updateEmployerInternship(id, internshipData) {
 }
 
 export async function deleteEmployerInternship(id) {
-  const response = await fetch(`${API_URL}${id}/delete/`, {
+  const response = await fetch(`${EMPLOYER_URL}${id}/delete/`, {
     method: "DELETE",
     headers: getAuthHeaders(),
   });

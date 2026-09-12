@@ -1,4 +1,7 @@
-const API_URL = "http://127.0.0.1:8000/api/employers/profile/";
+import { API_URL } from "./api";
+
+const EMPLOYER_PROFILE_URL =
+  `${API_URL}/api/employers/profile/`;
 
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
@@ -9,7 +12,7 @@ function getAuthHeaders() {
 }
 
 export async function getEmployerProfile() {
-  const response = await fetch(API_URL, {
+  const response = await fetch(EMPLOYER_PROFILE_URL, {
     method: "GET",
     headers: getAuthHeaders(),
   });
@@ -17,14 +20,16 @@ export async function getEmployerProfile() {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.detail || "Failed to fetch employer profile");
+    throw new Error(
+      data.detail || "Failed to fetch employer profile"
+    );
   }
 
   return data;
 }
 
 export async function updateEmployerProfile(profileData) {
-  const response = await fetch(API_URL, {
+  const response = await fetch(EMPLOYER_PROFILE_URL, {
     method: "PATCH",
     headers: {
       ...getAuthHeaders(),
@@ -36,7 +41,9 @@ export async function updateEmployerProfile(profileData) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.detail || "Failed to update employer profile");
+    throw new Error(
+      data.detail || "Failed to update employer profile"
+    );
   }
 
   return data;

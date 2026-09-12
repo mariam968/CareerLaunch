@@ -1,9 +1,11 @@
-const API_URL = "http://127.0.0.1:8000/api/applications/employer/";
+import { API_URL } from "./api";
+
+const EMPLOYER_APPLICATIONS_URL = `${API_URL}/api/applications/employer/`;
 
 export async function getEmployerApplications() {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(API_URL, {
+  const response = await fetch(EMPLOYER_APPLICATIONS_URL, {
     method: "GET",
     headers: {
       Authorization: `Token ${token}`,
@@ -23,7 +25,7 @@ export async function updateApplicationStatus(applicationId, status) {
   const token = localStorage.getItem("token");
 
   const response = await fetch(
-    `http://127.0.0.1:8000/api/applications/employer/${applicationId}/status/`,
+    `${EMPLOYER_APPLICATIONS_URL}${applicationId}/status/`,
     {
       method: "PATCH",
       headers: {

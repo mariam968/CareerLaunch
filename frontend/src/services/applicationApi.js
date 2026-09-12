@@ -1,9 +1,11 @@
-const API_URL = "http://127.0.0.1:8000/api/applications/";
+import { API_URL } from "./api";
+
+const APPLICATIONS_URL = `${API_URL}/api/applications/`;
 
 export async function getApplications() {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(API_URL, {
+  const response = await fetch(APPLICATIONS_URL, {
     headers: {
       Authorization: `Token ${token}`,
     },
@@ -29,7 +31,7 @@ export async function submitApplication(applicationData) {
     }
   });
 
-  const response = await fetch(`${API_URL}create/`, {
+  const response = await fetch(`${APPLICATIONS_URL}create/`, {
     method: "POST",
 
     headers: {
