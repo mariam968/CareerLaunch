@@ -3,6 +3,7 @@ import {
   getEmployerApplications,
   updateApplicationStatus,
 } from "../services/employerApplicationsApi";
+import { getMediaUrl } from "../services/api";
 
 function EmployerApplicants() {
   const [applications, setApplications] = useState([]);
@@ -87,11 +88,8 @@ function EmployerApplicants() {
   return (
     <div className="min-h-screen bg-slate-50 px-6 py-8 md:px-10">
       <div className="mx-auto max-w-6xl">
-
-        {/* Header */}
         <div className="mb-8 rounded-2xl bg-blue-600 p-7 text-white shadow-lg">
           <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
-
             <div className="flex items-center gap-4">
               <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/20 text-2xl">
                 👥
@@ -121,21 +119,17 @@ function EmployerApplicants() {
                 Total Applicants
               </p>
             </div>
-
           </div>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
             {error}
           </div>
         )}
 
-        {/* Empty State */}
         {applications.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-blue-200 bg-white p-10 text-center shadow-sm">
-
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-3xl">
               👥
             </div>
@@ -145,14 +139,13 @@ function EmployerApplicants() {
             </h2>
 
             <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
-              Applications from students will appear here
-              once they apply to your internships.
+              Applications from students will appear here once they apply to
+              your internships.
             </p>
 
             <button
               onClick={() => {
-                window.location.href =
-                  "/employer/dashboard";
+                window.location.href = "/employer/dashboard";
               }}
               className="mt-6 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
@@ -160,27 +153,18 @@ function EmployerApplicants() {
             </button>
           </div>
         ) : (
-
-          /* Applicants */
           <div className="space-y-6">
             {applications.map((application) => (
               <div
                 key={application.id}
                 className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
               >
-
-                {/* Applicant Header */}
                 <div className="border-b border-slate-100 bg-gradient-to-r from-blue-50 to-white p-6">
                   <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
-
                     <div className="flex items-center gap-4">
-
-                      {/* Avatar */}
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xl font-bold text-white shadow-sm">
                         {application.full_name
-                          ? application.full_name
-                              .charAt(0)
-                              .toUpperCase()
+                          ? application.full_name.charAt(0).toUpperCase()
                           : "S"}
                       </div>
 
@@ -193,10 +177,8 @@ function EmployerApplicants() {
                           {application.internship_title}
                         </p>
                       </div>
-
                     </div>
 
-                    {/* Status */}
                     <div className="flex items-center gap-3">
                       <span
                         className={`rounded-full border px-3 py-1.5 text-xs font-bold ${getStatusStyle(
@@ -206,20 +188,16 @@ function EmployerApplicants() {
                         {application.status}
                       </span>
                     </div>
-
                   </div>
                 </div>
 
-                {/* Applicant Information */}
                 <div className="p-6">
-
                   <div className="mb-6">
                     <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-slate-400">
                       Applicant Information
                     </h3>
 
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
                       <div className="rounded-xl bg-slate-50 p-4">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                           Email
@@ -281,14 +259,11 @@ function EmployerApplicants() {
                           ).toLocaleDateString()}
                         </p>
                       </div>
-
                     </div>
                   </div>
 
-                  {/* Status Management */}
                   <div className="mb-6 rounded-xl border border-blue-100 bg-blue-50/50 p-5">
                     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-
                       <div>
                         <h3 className="text-sm font-bold text-slate-900">
                           Application Status
@@ -309,41 +284,21 @@ function EmployerApplicants() {
                         }
                         className="rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                       >
-                        <option value="Applied">
-                          Applied
-                        </option>
-
-                        <option value="Under Review">
-                          Under Review
-                        </option>
-
-                        <option value="Shortlisted">
-                          Shortlisted
-                        </option>
-
-                        <option value="Interview">
-                          Interview
-                        </option>
-
-                        <option value="Accepted">
-                          Accepted
-                        </option>
-
-                        <option value="Rejected">
-                          Rejected
-                        </option>
+                        <option value="Applied">Applied</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="Shortlisted">Shortlisted</option>
+                        <option value="Interview">Interview</option>
+                        <option value="Accepted">Accepted</option>
+                        <option value="Rejected">Rejected</option>
                       </select>
-
                     </div>
                   </div>
 
-                  {/* Cover Letter */}
                   <div className="mb-6">
                     <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-900">
                       <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50">
                         ✉️
                       </span>
-
                       Cover Letter
                     </h3>
 
@@ -354,10 +309,8 @@ function EmployerApplicants() {
                     </div>
                   </div>
 
-                  {/* CV */}
                   {application.cv && (
                     <div className="flex flex-col justify-between gap-4 rounded-xl border border-slate-200 bg-white p-5 sm:flex-row sm:items-center">
-
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-lg">
                           📄
@@ -375,23 +328,20 @@ function EmployerApplicants() {
                       </div>
 
                       <a
-                        href={`http://127.0.0.1:8000${application.cv}`}
+                        href={getMediaUrl(application.cv)}
                         target="_blank"
                         rel="noreferrer"
                         className="rounded-xl bg-blue-600 px-5 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
                       >
                         View CV
                       </a>
-
                     </div>
                   )}
-
                 </div>
               </div>
             ))}
           </div>
         )}
-
       </div>
     </div>
   );

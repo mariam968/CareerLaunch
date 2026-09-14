@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getInternshipApplicants } from "../services/employerInternshipApplicantsApi";
 import { updateApplicationStatus } from "../services/employerApplicationsApi";
+import { getMediaUrl } from "../services/api";
 
 function EmployerInternshipApplicants() {
   const { internshipId } = useParams();
@@ -34,11 +35,10 @@ function EmployerInternshipApplicants() {
     try {
       setError("");
 
-      const updatedApplication =
-        await updateApplicationStatus(
-          applicationId,
-          newStatus
-        );
+      const updatedApplication = await updateApplicationStatus(
+        applicationId,
+        newStatus
+      );
 
       setApplications((current) =>
         current.map((application) =>
@@ -91,25 +91,18 @@ function EmployerInternshipApplicants() {
   return (
     <div className="min-h-screen bg-slate-50 p-6 md:p-8">
       <div className="mx-auto max-w-6xl">
-
-        {/* Back */}
         <button
           type="button"
-          onClick={() =>
-            navigate("/employer/dashboard")
-          }
+          onClick={() => navigate("/employer/dashboard")}
           className="mb-6 flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-600"
         >
           <span className="text-lg">←</span>
           Back to Dashboard
         </button>
 
-        {/* Header */}
         <div className="mb-8 overflow-hidden rounded-2xl bg-blue-600 shadow-lg">
           <div className="flex flex-col gap-5 px-6 py-7 md:flex-row md:items-center md:justify-between md:px-8">
-
             <div className="flex items-center gap-4">
-
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
                 👥
               </div>
@@ -123,10 +116,8 @@ function EmployerInternshipApplicants() {
                   Review and manage students who applied for this internship.
                 </p>
               </div>
-
             </div>
 
-            {/* Applicant count */}
             <div className="rounded-xl bg-blue-700 px-5 py-3">
               <p className="text-xs font-medium text-blue-100">
                 Total Applicants
@@ -136,11 +127,9 @@ function EmployerInternshipApplicants() {
                 {applications.length}
               </p>
             </div>
-
           </div>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4">
             <span className="text-lg">⚠️</span>
@@ -151,10 +140,8 @@ function EmployerInternshipApplicants() {
           </div>
         )}
 
-        {/* Empty state */}
         {applications.length === 0 ? (
           <div className="rounded-2xl border border-slate-200 bg-white px-6 py-16 text-center shadow-sm">
-
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-3xl">
               👥
             </div>
@@ -168,12 +155,9 @@ function EmployerInternshipApplicants() {
               Once applications start coming in, you can review their
               profiles and update their application status.
             </p>
-
           </div>
         ) : (
           <div>
-
-            {/* Section heading */}
             <div className="mb-5 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-bold text-slate-900">
@@ -186,23 +170,15 @@ function EmployerInternshipApplicants() {
               </div>
             </div>
 
-            {/* Applicants */}
             <div className="space-y-6">
-
               {applications.map((application) => (
                 <div
                   key={application.id}
                   className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
                 >
-
-                  {/* Applicant header */}
                   <div className="border-b border-slate-200 bg-slate-50 px-6 py-5 md:px-7">
-
                     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
                       <div className="flex items-center gap-4">
-
-                        {/* Avatar */}
                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 font-bold text-white">
                           {application.full_name
                             ? application.full_name
@@ -223,12 +199,9 @@ function EmployerInternshipApplicants() {
                             ).toLocaleDateString()}
                           </p>
                         </div>
-
                       </div>
 
-                      {/* Status */}
                       <div className="flex items-center gap-3">
-
                         <span
                           className={`rounded-full border px-3 py-1 text-xs font-semibold ${getStatusClasses(
                             application.status
@@ -247,42 +220,23 @@ function EmployerInternshipApplicants() {
                           }
                           className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                         >
-                          <option value="Applied">
-                            Applied
-                          </option>
-
+                          <option value="Applied">Applied</option>
                           <option value="Under Review">
                             Under Review
                           </option>
-
                           <option value="Shortlisted">
                             Shortlisted
                           </option>
-
-                          <option value="Interview">
-                            Interview
-                          </option>
-
-                          <option value="Accepted">
-                            Accepted
-                          </option>
-
-                          <option value="Rejected">
-                            Rejected
-                          </option>
+                          <option value="Interview">Interview</option>
+                          <option value="Accepted">Accepted</option>
+                          <option value="Rejected">Rejected</option>
                         </select>
-
                       </div>
-
                     </div>
                   </div>
 
-                  {/* Student details */}
                   <div className="px-6 py-6 md:px-7">
-
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
-                      {/* Email */}
                       <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                           Email
@@ -293,7 +247,6 @@ function EmployerInternshipApplicants() {
                         </p>
                       </div>
 
-                      {/* Phone */}
                       <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                           Phone
@@ -304,7 +257,6 @@ function EmployerInternshipApplicants() {
                         </p>
                       </div>
 
-                      {/* Institution */}
                       <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                           Institution
@@ -315,7 +267,6 @@ function EmployerInternshipApplicants() {
                         </p>
                       </div>
 
-                      {/* Course */}
                       <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                           Course
@@ -326,7 +277,6 @@ function EmployerInternshipApplicants() {
                         </p>
                       </div>
 
-                      {/* Year */}
                       <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                           Year of Study
@@ -337,7 +287,6 @@ function EmployerInternshipApplicants() {
                         </p>
                       </div>
 
-                      {/* Applied date */}
                       <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
                         <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                           Application Date
@@ -349,12 +298,9 @@ function EmployerInternshipApplicants() {
                           ).toLocaleDateString()}
                         </p>
                       </div>
-
                     </div>
 
-                    {/* Cover letter */}
                     <div className="mt-6 rounded-xl border border-blue-100 bg-blue-50/50 p-5">
-
                       <div className="mb-3 flex items-center gap-2">
                         <span className="text-lg">✉️</span>
 
@@ -367,12 +313,9 @@ function EmployerInternshipApplicants() {
                         {application.cover_letter ||
                           "No cover letter provided."}
                       </p>
-
                     </div>
 
-                    {/* CV */}
                     <div className="mt-5 flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5 sm:flex-row sm:items-center sm:justify-between">
-
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100 text-lg">
                           📄
@@ -391,7 +334,7 @@ function EmployerInternshipApplicants() {
 
                       {application.cv ? (
                         <a
-                          href={`http://127.0.0.1:8000${application.cv}`}
+                          href={getMediaUrl(application.cv)}
                           target="_blank"
                           rel="noreferrer"
                           className="rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
@@ -403,17 +346,13 @@ function EmployerInternshipApplicants() {
                           No CV provided
                         </span>
                       )}
-
                     </div>
-
                   </div>
                 </div>
               ))}
-
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

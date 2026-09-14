@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../services/api";
 
 function EmployerLogin() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function EmployerLogin() {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/employers/login/",
+        `${API_URL}/api/employers/login/`,
         {
           method: "POST",
           headers: {
@@ -49,22 +50,15 @@ function EmployerLogin() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-
-      {/* Top branding */}
       <div className="flex h-16 items-center border-b border-slate-200 bg-white px-6">
         <h1 className="text-xl font-bold tracking-tight text-slate-900">
           Career<span className="text-blue-600">Launch</span>
         </h1>
       </div>
 
-      {/* Login area */}
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-5 py-10">
-
         <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl md:grid-cols-2">
-
-          {/* Left blue section */}
           <div className="hidden bg-blue-600 p-10 text-white md:flex md:flex-col md:justify-between">
-
             <div>
               <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
                 🏢
@@ -90,13 +84,9 @@ function EmployerLogin() {
                 from one place.
               </p>
             </div>
-
           </div>
 
-          {/* Right login section */}
           <div className="p-7 sm:p-10">
-
-            {/* Heading */}
             <div className="mb-8">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-xl md:hidden">
                 🏢
@@ -111,7 +101,6 @@ function EmployerLogin() {
               </p>
             </div>
 
-            {/* Error */}
             {error && (
               <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
                 <span>⚠️</span>
@@ -122,10 +111,7 @@ function EmployerLogin() {
               </div>
             )}
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-5">
-
-              {/* Username */}
               <div>
                 <label
                   htmlFor="username"
@@ -147,7 +133,6 @@ function EmployerLogin() {
                 />
               </div>
 
-              {/* Password */}
               <div>
                 <label
                   htmlFor="password"
@@ -169,7 +154,6 @@ function EmployerLogin() {
                 />
               </div>
 
-              {/* Login button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -177,16 +161,13 @@ function EmployerLogin() {
               >
                 {loading ? "Logging in..." : "Log In"}
               </button>
-
             </form>
 
-            {/* Footer */}
             <div className="mt-8 border-t border-slate-200 pt-6 text-center">
               <p className="text-xs text-slate-400">
                 CareerLaunch Employer Portal
               </p>
             </div>
-
           </div>
         </div>
       </div>

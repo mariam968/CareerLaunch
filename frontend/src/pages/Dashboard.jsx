@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../services/api";
 
 function Dashboard() {
   const [greeting, setGreeting] = useState("");
@@ -11,9 +12,6 @@ function Dashboard() {
   }, []);
 
   const loadDashboard = async () => {
-    // -----------------------------
-    // Get student's name
-    // -----------------------------
     const fullName = localStorage.getItem("full_name");
 
     if (fullName) {
@@ -21,9 +19,6 @@ function Dashboard() {
       setFirstName(name);
     }
 
-    // -----------------------------
-    // Set greeting
-    // -----------------------------
     const hour = new Date().getHours();
 
     if (hour >= 5 && hour < 12) {
@@ -34,21 +29,15 @@ function Dashboard() {
       setGreeting("Good evening");
     }
 
-    // -----------------------------
-    // Get authentication token
-    // -----------------------------
     const token = localStorage.getItem("token");
 
     if (!token) {
       return;
     }
 
-    // -----------------------------
-    // Get profile
-    // -----------------------------
     try {
       const profileResponse = await fetch(
-        "http://127.0.0.1:8000/api/accounts/profile/",
+        `${API_URL}/api/accounts/profile/`,
         {
           headers: {
             Authorization: `Token ${token}`,
@@ -89,12 +78,9 @@ function Dashboard() {
       console.error("Profile error:", error);
     }
 
-    // -----------------------------
-    // Get applications
-    // -----------------------------
     try {
       const applicationsResponse = await fetch(
-        "http://127.0.0.1:8000/api/applications/",
+        `${API_URL}/api/applications/`,
         {
           headers: {
             Authorization: `Token ${token}`,
@@ -114,8 +100,6 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 p-6">
-
-      {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900">
           {greeting},{" "}
@@ -133,10 +117,7 @@ function Dashboard() {
         </p>
       </div>
 
-      {/* Dashboard Statistics */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-
-        {/* Applications */}
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-sm font-medium text-slate-500">
             Applications
@@ -151,7 +132,6 @@ function Dashboard() {
           </p>
         </div>
 
-        {/* Profile Completion */}
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-sm font-medium text-slate-500">
             Profile
@@ -165,7 +145,6 @@ function Dashboard() {
             Profile completion
           </p>
 
-          {/* Progress bar */}
           <div className="mt-4 h-2 w-full rounded-full bg-slate-200">
             <div
               className="h-2 rounded-full bg-blue-600 transition-all duration-500"
@@ -175,12 +154,9 @@ function Dashboard() {
             ></div>
           </div>
         </div>
-
       </div>
 
-      {/* Recommended Section */}
       <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-
         <h2 className="text-xl font-bold text-slate-900">
           Recommended for you
         </h2>
@@ -198,9 +174,7 @@ function Dashboard() {
         >
           Browse Internships
         </button>
-
       </div>
-
     </div>
   );
 }

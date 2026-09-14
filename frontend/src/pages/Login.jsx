@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { API_URL } from '../services/api'
 
 function Login() {
   const navigate = useNavigate()
@@ -31,7 +32,7 @@ function Login() {
 
     try {
       const response = await fetch(
-        'http://127.0.0.1:8000/api/accounts/login/',
+        `${API_URL}/api/accounts/login/`,
         {
           method: 'POST',
           headers: {
@@ -49,12 +50,10 @@ function Login() {
         )
       }
 
-      // Save authentication information
       localStorage.setItem('token', data.token)
       localStorage.setItem('username', data.username)
       localStorage.setItem('email', data.email)
 
-      // Go to dashboard
       navigate('/dashboard')
     } catch (err) {
       console.error(err)
@@ -72,7 +71,6 @@ function Login() {
 
       <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md flex-col justify-center">
 
-        {/* Brand */}
         <div className="mb-8 text-center">
 
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-2xl font-bold text-white shadow-md">
@@ -89,10 +87,8 @@ function Login() {
 
         </div>
 
-        {/* Login Card */}
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
-          {/* Card Header */}
           <div className="border-b border-slate-100 bg-white px-6 py-6 sm:px-8">
 
             <div className="flex items-center gap-3">
@@ -117,7 +113,6 @@ function Login() {
 
           <div className="p-6 sm:p-8">
 
-            {/* Error */}
             {error && (
               <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4">
 
@@ -147,7 +142,6 @@ function Login() {
               className="space-y-5"
             >
 
-              {/* Username */}
               <div>
                 <label className="text-sm font-semibold text-slate-700">
                   Username
@@ -173,7 +167,6 @@ function Login() {
                 </div>
               </div>
 
-              {/* Password */}
               <div>
                 <label className="text-sm font-semibold text-slate-700">
                   Password
@@ -199,7 +192,6 @@ function Login() {
                 </div>
               </div>
 
-              {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
@@ -210,7 +202,6 @@ function Login() {
 
             </form>
 
-            {/* Registration */}
             <div className="mt-7 border-t border-slate-100 pt-6 text-center">
 
               <p className="text-sm text-slate-500">
@@ -230,7 +221,6 @@ function Login() {
 
         </div>
 
-        {/* Footer */}
         <p className="mt-6 text-center text-xs text-slate-400">
           CareerLaunch • Your career journey starts here 🚀
         </p>

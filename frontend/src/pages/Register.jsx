@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../services/api";
 
 function Register() {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ function Register() {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/accounts/register/",
+        `${API_URL}/api/accounts/register/`,
         {
           method: "POST",
           headers: {
@@ -112,7 +113,6 @@ function Register() {
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
 
-        {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-slate-900">
             Create your CareerLaunch account
@@ -123,7 +123,6 @@ function Register() {
           </p>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="mb-6 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-red-700">
             {error}
@@ -132,7 +131,6 @@ function Register() {
 
         <form onSubmit={handleSubmit} className="space-y-8">
 
-          {/* Account Information */}
           <div>
             <h2 className="text-lg font-semibold text-slate-900 mb-4">
               Account Information
@@ -208,7 +206,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Personal Information */}
           <div>
             <h2 className="text-lg font-semibold text-slate-900 mb-4">
               Personal Information
@@ -267,7 +264,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Education */}
           <div>
             <h2 className="text-lg font-semibold text-slate-900 mb-4">
               Education
@@ -331,7 +327,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Additional Information */}
           <div>
             <h2 className="text-lg font-semibold text-slate-900 mb-4">
               Additional Information
@@ -353,7 +348,6 @@ function Register() {
             </div>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -364,7 +358,6 @@ function Register() {
 
         </form>
 
-        {/* Login link */}
         <p className="text-center text-sm text-slate-500 mt-6">
           Already have an account?{" "}
           <button
