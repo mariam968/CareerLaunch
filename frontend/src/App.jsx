@@ -20,6 +20,8 @@ import EmployerInternshipApplicants from "./pages/EmployerInternshipApplicants";
 
 import Register from './pages/Register'
 
+import EmployerRegister from "./pages/EmployerRegister";
+
 
 
 import Dashboard from './pages/Dashboard'
@@ -92,6 +94,11 @@ function App() {
   element={<EmployerLogin />}
 />
 
+
+            <Route
+  path="/employer/register"
+  element={<EmployerRegister />}
+/>
           <Route
             path="/internships"
             element={
