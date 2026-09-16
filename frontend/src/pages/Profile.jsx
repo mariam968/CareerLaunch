@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getProfile, updateProfile } from '../services/profileApi'
+import { getMediaUrl } from '../services/api'
 
 function Profile() {
   const [profile, setProfile] = useState({
@@ -123,7 +124,6 @@ function Profile() {
       <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-5xl">
           <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
-
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-2xl">
               👤
             </div>
@@ -135,7 +135,6 @@ function Profile() {
             <p className="mt-2 text-sm text-slate-500">
               Please wait while we retrieve your information...
             </p>
-
           </div>
         </div>
       </div>
@@ -144,16 +143,10 @@ function Profile() {
 
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
-
       <div className="mx-auto max-w-5xl">
-
-        {/* Header */}
         <div className="mb-8 overflow-hidden rounded-2xl bg-blue-600 shadow-sm">
-
           <div className="px-6 py-7 sm:px-8">
-
             <div className="flex items-start gap-4">
-
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-2xl">
                 👤
               </div>
@@ -172,21 +165,15 @@ function Profile() {
                   understand your background, education and skills.
                 </p>
               </div>
-
             </div>
-
           </div>
 
           <div className="h-1 bg-blue-700" />
-
         </div>
 
-        {/* Error */}
         {error && (
           <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4">
-
             <div className="flex items-start gap-3">
-
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 text-sm font-bold text-red-600">
                 !
               </div>
@@ -200,25 +187,17 @@ function Profile() {
                   {error}
                 </p>
               </div>
-
             </div>
-
           </div>
         )}
 
-        {/* Profile Form */}
         <form
           onSubmit={handleSubmit}
           className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
         >
-
           <div className="p-6 sm:p-8">
-
-            {/* Personal Information */}
             <section>
-
               <div className="flex items-center gap-3">
-
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-lg">
                   👤
                 </div>
@@ -232,12 +211,9 @@ function Profile() {
                     Your basic contact information.
                   </p>
                 </div>
-
               </div>
 
               <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
-
-                {/* Full Name */}
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Full Name
@@ -254,7 +230,6 @@ function Profile() {
                   />
                 </div>
 
-                {/* Email */}
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Email Address
@@ -271,7 +246,6 @@ function Profile() {
                   />
                 </div>
 
-                {/* Phone */}
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Phone Number
@@ -288,7 +262,6 @@ function Profile() {
                   />
                 </div>
 
-                {/* Location */}
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Location
@@ -313,19 +286,13 @@ function Profile() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-
               </div>
-
             </section>
 
-            {/* Divider */}
             <div className="my-10 border-t border-slate-100" />
 
-            {/* Education */}
             <section>
-
               <div className="flex items-center gap-3">
-
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-lg">
                   🎓
                 </div>
@@ -339,12 +306,9 @@ function Profile() {
                     Add your academic background.
                   </p>
                 </div>
-
               </div>
 
               <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
-
-                {/* Institution */}
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Institution
@@ -361,7 +325,6 @@ function Profile() {
                   />
                 </div>
 
-                {/* Course */}
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Course / Program
@@ -378,7 +341,6 @@ function Profile() {
                   />
                 </div>
 
-                {/* Year */}
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Year of Study
@@ -399,19 +361,13 @@ function Profile() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
-
               </div>
-
             </section>
 
-            {/* Divider */}
             <div className="my-10 border-t border-slate-100" />
 
-            {/* Skills */}
             <section>
-
               <div className="flex items-center gap-3">
-
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 text-lg">
                   🛠️
                 </div>
@@ -425,11 +381,9 @@ function Profile() {
                     Highlight the skills you can bring to an internship.
                   </p>
                 </div>
-
               </div>
 
               <div className="mt-6">
-
                 <label className="text-sm font-semibold text-slate-700">
                   Your Skills
                 </label>
@@ -446,19 +400,13 @@ function Profile() {
                 <p className="mt-2 text-xs text-slate-400">
                   Separate your skills with commas.
                 </p>
-
               </div>
-
             </section>
 
-            {/* Divider */}
             <div className="my-10 border-t border-slate-100" />
 
-            {/* CV */}
             <section>
-
               <div className="flex items-center gap-3">
-
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-lg">
                   📎
                 </div>
@@ -472,14 +420,10 @@ function Profile() {
                     Upload the CV employers should receive with your applications.
                   </p>
                 </div>
-
               </div>
 
               <div className="mt-6">
-
-                {/* Upload Area */}
                 <div className="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 p-6 transition hover:border-blue-300 hover:bg-blue-50/30">
-
                   <label className="text-sm font-semibold text-slate-700">
                     Upload your CV
                   </label>
@@ -494,21 +438,16 @@ function Profile() {
                   <p className="mt-2 text-xs text-slate-400">
                     Accepted formats: PDF, DOC or DOCX.
                   </p>
-
                 </div>
 
-                {/* Existing CV */}
                 {cvUrl && (
                   <div className="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-5">
-
                     <div className="flex items-start gap-4">
-
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-lg text-white">
                         📄
                       </div>
 
                       <div className="flex-1">
-
                         <p className="text-sm font-bold text-slate-900">
                           CV uploaded
                         </p>
@@ -518,46 +457,34 @@ function Profile() {
                         </p>
 
                         <a
-                          href={cvUrl}
+                          href={getMediaUrl(cvUrl)}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="mt-3 inline-flex items-center font-semibold text-blue-600 transition hover:text-blue-700"
                         >
                           View uploaded CV →
                         </a>
-
                       </div>
-
                     </div>
-
                   </div>
                 )}
 
-                {/* New CV selected */}
                 {cv && (
                   <div className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3">
-
                     <p className="text-sm text-green-700">
                       <span className="font-semibold">
                         New CV selected:
                       </span>{' '}
                       {cv.name}
                     </p>
-
                   </div>
                 )}
-
               </div>
-
             </section>
-
           </div>
 
-          {/* Footer */}
           <div className="flex flex-col gap-4 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-
             <div>
-
               {saved ? (
                 <div>
                   <p className="text-sm font-semibold text-green-600">
@@ -579,7 +506,6 @@ function Profile() {
                   </p>
                 </div>
               )}
-
             </div>
 
             <button
@@ -588,11 +514,8 @@ function Profile() {
             >
               Save Profile →
             </button>
-
           </div>
-
         </form>
-
       </div>
     </div>
   )
