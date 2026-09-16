@@ -46,13 +46,14 @@ function Login() {
 
       if (!response.ok) {
         throw new Error(
-          data.error || 'Invalid username or password.'
+          data.error || data.detail || 'Invalid username or password.'
         )
       }
 
       localStorage.setItem('token', data.token)
       localStorage.setItem('username', data.username)
-      localStorage.setItem('email', data.email)
+      localStorage.setItem('email', data.email || '')
+      localStorage.setItem('userType', 'student')
 
       navigate('/dashboard')
     } catch (err) {
@@ -71,6 +72,7 @@ function Login() {
 
       <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md flex-col justify-center">
 
+        {/* CareerLaunch Header */}
         <div className="mb-8 text-center">
 
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-2xl font-bold text-white shadow-md">
@@ -87,8 +89,10 @@ function Login() {
 
         </div>
 
+        {/* Login Card */}
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
+          {/* Header */}
           <div className="border-b border-slate-100 bg-white px-6 py-6 sm:px-8">
 
             <div className="flex items-center gap-3">
@@ -113,6 +117,46 @@ function Login() {
 
           <div className="p-6 sm:p-8">
 
+            {/* Account Type */}
+            <div className="mb-6">
+
+              <p className="mb-3 text-sm font-semibold text-slate-700">
+                Logging in as
+              </p>
+
+              <div className="grid grid-cols-2 gap-3">
+
+                {/* Student */}
+                <div className="rounded-xl border-2 border-blue-600 bg-blue-50 p-3 text-center">
+                  <div className="text-xl">
+                    🎓
+                  </div>
+
+                  <p className="mt-1 text-sm font-semibold text-blue-700">
+                    Student
+                  </p>
+                </div>
+
+                {/* Employer */}
+                <button
+                  type="button"
+                  onClick={() => navigate('/employer/login')}
+                  className="rounded-xl border border-slate-200 bg-white p-3 text-center transition hover:border-blue-300 hover:bg-blue-50"
+                >
+                  <div className="text-xl">
+                    🏢
+                  </div>
+
+                  <p className="mt-1 text-sm font-semibold text-slate-600">
+                    Employer
+                  </p>
+                </button>
+
+              </div>
+
+            </div>
+
+            {/* Error */}
             {error && (
               <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4">
 
@@ -137,12 +181,15 @@ function Login() {
               </div>
             )}
 
+            {/* Student Login Form */}
             <form
               onSubmit={handleSubmit}
               className="space-y-5"
             >
 
+              {/* Username */}
               <div>
+
                 <label className="text-sm font-semibold text-slate-700">
                   Username
                 </label>
@@ -165,9 +212,12 @@ function Login() {
                   />
 
                 </div>
+
               </div>
 
+              {/* Password */}
               <div>
+
                 <label className="text-sm font-semibold text-slate-700">
                   Password
                 </label>
@@ -190,8 +240,10 @@ function Login() {
                   />
 
                 </div>
+
               </div>
 
+              {/* Login */}
               <button
                 type="submit"
                 disabled={loading}
@@ -202,18 +254,32 @@ function Login() {
 
             </form>
 
-            <div className="mt-7 border-t border-slate-100 pt-6 text-center">
+            {/* Registration */}
+            <div className="mt-7 border-t border-slate-100 pt-6">
 
-              <p className="text-sm text-slate-500">
+              <p className="text-center text-sm text-slate-500">
                 Don't have an account?
               </p>
 
-              <Link
-                to="/register"
-                className="mt-2 inline-flex items-center font-semibold text-blue-600 transition hover:text-blue-700"
-              >
-                Create a student account →
-              </Link>
+              <div className="mt-4 grid gap-3">
+
+                {/* Student Register */}
+                <Link
+                  to="/register"
+                  className="flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-600 transition hover:bg-blue-100"
+                >
+                  🎓 Create a student account →
+                </Link>
+
+                {/* Employer Register */}
+                <Link
+                  to="/employer/register"
+                  className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+                >
+                  🏢 Create an employer account →
+                </Link>
+
+              </div>
 
             </div>
 
