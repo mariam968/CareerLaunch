@@ -110,26 +110,18 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_STORAGE = (
-    'whitenoise.storage.CompressedManifestStaticFilesStorage'
-)
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
-
-if DEBUG:
-    MAILERS = {
-        'default': {
-            'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-        },
-    }
-else:
-    MAILERS = {
-        'default': {
-            'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
-        },
-    }
 
 CORS_ALLOWED_ORIGINS = [
     origin.strip()
@@ -149,9 +141,19 @@ REST_FRAMEWORK = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = (
+        'HTTP_X_FORWARDED_PROTO',
+        'https',
+    )
+
     SECURE_SSL_REDIRECT = True
+
     SECURE_HSTS_SECONDS = 31536000
+
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
     SECURE_HSTS_PRELOAD = True
+
     SESSION_COOKIE_SECURE = True
+
     CSRF_COOKIE_SECURE = True
