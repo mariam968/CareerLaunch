@@ -4,11 +4,15 @@ import {
   updateApplicationStatus,
 } from "../services/employerApplicationsApi";
 import { getMediaUrl } from "../services/api";
+import CvViewer from "../components/CvViewer";
 
 function EmployerApplicants() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // CV viewer state
+  const [selectedCv, setSelectedCv] = useState(null);
 
   useEffect(() => {
     loadApplications();
@@ -71,6 +75,27 @@ function EmployerApplicants() {
     }
   }
 
+  function openCv(application) {
+    if (!application.cv) {
+      return;
+    }
+
+    const cvUrl = getMediaUrl(application.cv);
+
+    const fileName =
+      application.cv.split("/").pop()?.split("?")[0] || "CV";
+
+    setSelectedCv({
+      url: cvUrl,
+      fileName,
+      applicantName: application.full_name,
+    });
+  }
+
+  function closeCv() {
+    setSelectedCv(null);
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
@@ -88,6 +113,7 @@ function EmployerApplicants() {
   return (
     <div className="min-h-screen bg-slate-50 px-6 py-8 md:px-10">
       <div className="mx-auto max-w-6xl">
+        {/* Header */}
         <div className="mb-8 rounded-2xl bg-blue-600 p-7 text-white shadow-lg">
           <div className="flex flex-col justify-between gap-5 md:flex-row md:items-center">
             <div className="flex items-center gap-4">
@@ -122,12 +148,14 @@ function EmployerApplicants() {
           </div>
         </div>
 
+        {/* Error */}
         {error && (
           <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-medium text-red-700">
             {error}
           </div>
         )}
 
+        {/* No applicants */}
         {applications.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-blue-200 bg-white p-10 text-center shadow-sm">
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-3xl">
@@ -159,6 +187,7 @@ function EmployerApplicants() {
                 key={application.id}
                 className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:shadow-md"
               >
+                {/* Applicant Header */}
                 <div className="border-b border-slate-100 bg-gradient-to-r from-blue-50 to-white p-6">
                   <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
                     <div className="flex items-center gap-4">
@@ -191,6 +220,7 @@ function EmployerApplicants() {
                   </div>
                 </div>
 
+                {/* Applicant Details */}
                 <div className="p-6">
                   <div className="mb-6">
                     <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-slate-400">
@@ -262,6 +292,7 @@ function EmployerApplicants() {
                     </div>
                   </div>
 
+                  {/* Application Status */}
                   <div className="mb-6 rounded-xl border border-blue-100 bg-blue-50/50 p-5">
                     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                       <div>
@@ -285,8 +316,12 @@ function EmployerApplicants() {
                         className="rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                       >
                         <option value="Applied">Applied</option>
-                        <option value="Under Review">Under Review</option>
-                        <option value="Shortlisted">Shortlisted</option>
+                        <option value="Under Review">
+                          Under Review
+                        </option>
+                        <option value="Shortlisted">
+                          Shortlisted
+                        </option>
                         <option value="Interview">Interview</option>
                         <option value="Accepted">Accepted</option>
                         <option value="Rejected">Rejected</option>
@@ -294,6 +329,7 @@ function EmployerApplicants() {
                     </div>
                   </div>
 
+                  {/* Cover Letter */}
                   <div className="mb-6">
                     <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-slate-900">
                       <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50">
@@ -309,6 +345,7 @@ function EmployerApplicants() {
                     </div>
                   </div>
 
+                  {/* CV */}
                   {application.cv && (
                     <div className="flex flex-col justify-between gap-4 rounded-xl border border-slate-200 bg-white p-5 sm:flex-row sm:items-center">
                       <div className="flex items-center gap-3">
@@ -327,14 +364,13 @@ function EmployerApplicants() {
                         </div>
                       </div>
 
-                      <a
-                        href={getMediaUrl(application.cv)}
-                        target="_blank"
-                        rel="noreferrer"
+                      <button
+                        type="button"
+                        onClick={() => openCv(application)}
                         className="rounded-xl bg-blue-600 px-5 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-blue-700"
                       >
                         View CV
-                      </a>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -343,6 +379,47 @@ function EmployerApplicants() {
           </div>
         )}
       </div>
+
+      {/* CV Viewer Modal */}
+      {selectedCv && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="flex h-[95vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+            {/* Viewer Header */}
+            <div className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white px-5 py-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">
+                  Applicant CV
+                </p>
+
+                <h2 className="mt-1 text-lg font-bold text-slate-900">
+                  {selectedCv.applicantName}
+                </h2>
+
+                <p className="text-xs text-slate-500">
+                  {selectedCv.fileName}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={closeCv}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-xl font-bold text-slate-600 transition hover:bg-red-100 hover:text-red-600"
+                aria-label="Close CV viewer"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Viewer */}
+            <div className="min-h-0 flex-1 bg-slate-100">
+              <CvViewer
+                url={selectedCv.url}
+                fileName={selectedCv.fileName}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

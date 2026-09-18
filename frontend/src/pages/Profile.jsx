@@ -18,6 +18,7 @@ function Profile() {
   const [cvUrl, setCvUrl] = useState('')
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -66,19 +67,69 @@ function Profile() {
   const handleCvChange = (event) => {
     const selectedFile = event.target.files[0]
 
-    if (selectedFile) {
-      setCv(selectedFile)
-      setSaved(false)
-      setError('')
+    if (!selectedFile) {
+      return
     }
+
+    setSaved(false)
+    setError('')
+
+    // Maximum CV size: 5 MB
+    const maxSize = 5 * 1024 * 1024
+
+    if (selectedFile.size > maxSize) {
+      setCv(null)
+
+      setError(
+        `Your CV is too large. The maximum allowed size is 5 MB. Your file is ${(selectedFile.size / (1024 * 1024)).toFixed(1)} MB.`
+      )
+
+      event.target.value = ''
+      return
+    }
+
+    // Allowed file types
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ]
+
+    const allowedExtensions = ['pdf', 'doc', 'docx']
+
+    const fileExtension = selectedFile.name
+      .split('.')
+      .pop()
+      .toLowerCase()
+
+    if (
+      !allowedTypes.includes(selectedFile.type) &&
+      !allowedExtensions.includes(fileExtension)
+    ) {
+      setCv(null)
+
+      setError(
+        'Invalid CV format. Please upload a PDF, DOC, or DOCX file.'
+      )
+
+      event.target.value = ''
+      return
+    }
+
+    setCv(selectedFile)
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
+    if (saving) {
+      return
+    }
+
     try {
       setError('')
       setSaved(false)
+      setSaving(true)
 
       const profileData = {
         full_name: profile.fullName,
@@ -115,7 +166,13 @@ function Profile() {
       setCv(null)
       setSaved(true)
     } catch (error) {
-      setError(error.message)
+      console.error('Profile save error:', error)
+
+      setError(
+        error.message || 'Failed to save your profile. Please try again.'
+      )
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -144,9 +201,12 @@ function Profile() {
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
+
+        {/* HEADER */}
         <div className="mb-8 overflow-hidden rounded-2xl bg-blue-600 shadow-sm">
           <div className="px-6 py-7 sm:px-8">
             <div className="flex items-start gap-4">
+
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-2xl">
                 👤
               </div>
@@ -165,15 +225,18 @@ function Profile() {
                   understand your background, education and skills.
                 </p>
               </div>
+
             </div>
           </div>
 
           <div className="h-1 bg-blue-700" />
         </div>
 
+        {/* ERROR MESSAGE */}
         {error && (
           <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4">
             <div className="flex items-start gap-3">
+
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-100 text-sm font-bold text-red-600">
                 !
               </div>
@@ -187,17 +250,24 @@ function Profile() {
                   {error}
                 </p>
               </div>
+
             </div>
           </div>
         )}
 
+        {/* PROFILE FORM */}
         <form
           onSubmit={handleSubmit}
           className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
         >
+
           <div className="p-6 sm:p-8">
+
+            {/* PERSONAL INFORMATION */}
             <section>
+
               <div className="flex items-center gap-3">
+
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-lg">
                   👤
                 </div>
@@ -211,9 +281,11 @@ function Profile() {
                     Your basic contact information.
                   </p>
                 </div>
+
               </div>
 
               <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
+
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Full Name
@@ -286,13 +358,17 @@ function Profile() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
+
               </div>
             </section>
 
             <div className="my-10 border-t border-slate-100" />
 
+            {/* EDUCATION */}
             <section>
+
               <div className="flex items-center gap-3">
+
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-lg">
                   🎓
                 </div>
@@ -306,9 +382,11 @@ function Profile() {
                     Add your academic background.
                   </p>
                 </div>
+
               </div>
 
               <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
+
                 <div>
                   <label className="text-sm font-semibold text-slate-700">
                     Institution
@@ -361,13 +439,17 @@ function Profile() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
+
               </div>
             </section>
 
             <div className="my-10 border-t border-slate-100" />
 
+            {/* SKILLS */}
             <section>
+
               <div className="flex items-center gap-3">
+
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 text-lg">
                   🛠️
                 </div>
@@ -381,9 +463,11 @@ function Profile() {
                     Highlight the skills you can bring to an internship.
                   </p>
                 </div>
+
               </div>
 
               <div className="mt-6">
+
                 <label className="text-sm font-semibold text-slate-700">
                   Your Skills
                 </label>
@@ -400,13 +484,17 @@ function Profile() {
                 <p className="mt-2 text-xs text-slate-400">
                   Separate your skills with commas.
                 </p>
+
               </div>
             </section>
 
             <div className="my-10 border-t border-slate-100" />
 
+            {/* CV */}
             <section>
+
               <div className="flex items-center gap-3">
+
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-lg">
                   📎
                 </div>
@@ -420,34 +508,66 @@ function Profile() {
                     Upload the CV employers should receive with your applications.
                   </p>
                 </div>
+
               </div>
 
               <div className="mt-6">
+
                 <div className="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 p-6 transition hover:border-blue-300 hover:bg-blue-50/30">
+
                   <label className="text-sm font-semibold text-slate-700">
                     Upload your CV
                   </label>
 
                   <input
                     type="file"
-                    accept=".pdf,.doc,.docx"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     onChange={handleCvChange}
-                    className="mt-3 block w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-700"
+                    disabled={saving}
+                    className="mt-3 block w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                   />
 
                   <p className="mt-2 text-xs text-slate-400">
-                    Accepted formats: PDF, DOC or DOCX.
+                    Accepted formats: PDF, DOC or DOCX. Maximum size: 5 MB.
                   </p>
+
                 </div>
 
+                {/* NEW CV SELECTED */}
+                {cv && (
+                  <div className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3">
+
+                    <p className="text-sm text-green-700">
+                      <span className="font-semibold">
+                        New CV selected:
+                      </span>{' '}
+                      {cv.name}
+                    </p>
+
+                    <p className="mt-1 text-xs text-green-600">
+                      File size:{' '}
+                      {(cv.size / (1024 * 1024)).toFixed(2)} MB
+                    </p>
+
+                    <p className="mt-1 text-xs text-green-600">
+                      Ready to upload when you save your profile.
+                    </p>
+
+                  </div>
+                )}
+
+                {/* CURRENT CV */}
                 {cvUrl && (
                   <div className="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-5">
+
                     <div className="flex items-start gap-4">
+
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-lg text-white">
                         📄
                       </div>
 
                       <div className="flex-1">
+
                         <p className="text-sm font-bold text-slate-900">
                           CV uploaded
                         </p>
@@ -464,29 +584,27 @@ function Profile() {
                         >
                           View uploaded CV →
                         </a>
+
                       </div>
+
                     </div>
+
                   </div>
                 )}
 
-                {cv && (
-                  <div className="mt-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3">
-                    <p className="text-sm text-green-700">
-                      <span className="font-semibold">
-                        New CV selected:
-                      </span>{' '}
-                      {cv.name}
-                    </p>
-                  </div>
-                )}
               </div>
             </section>
+
           </div>
 
+          {/* SAVE SECTION */}
           <div className="flex flex-col gap-4 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+
             <div>
+
               {saved ? (
                 <div>
+
                   <p className="text-sm font-semibold text-green-600">
                     ✓ Profile saved successfully
                   </p>
@@ -494,9 +612,23 @@ function Profile() {
                   <p className="mt-1 text-xs text-slate-500">
                     Your information has been updated.
                   </p>
+
+                </div>
+              ) : saving ? (
+                <div>
+
+                  <p className="text-sm font-semibold text-blue-600">
+                    Saving your profile...
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    Please wait while your CV is being uploaded.
+                  </p>
+
                 </div>
               ) : (
                 <div>
+
                   <p className="text-sm font-semibold text-slate-700">
                     Keep your profile updated
                   </p>
@@ -504,17 +636,26 @@ function Profile() {
                   <p className="mt-1 text-xs text-slate-500">
                     Updated information helps employers understand you better.
                   </p>
+
                 </div>
               )}
+
             </div>
 
             <button
               type="submit"
-              className="rounded-xl bg-blue-600 px-7 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md"
+              disabled={saving}
+              className={`rounded-xl px-7 py-3 text-sm font-semibold text-white shadow-sm transition ${
+                saving
+                  ? 'cursor-not-allowed bg-blue-400'
+                  : 'bg-blue-600 hover:bg-blue-700 hover:shadow-md'
+              }`}
             >
-              Save Profile →
+              {saving ? 'Saving...' : 'Save Profile →'}
             </button>
+
           </div>
+
         </form>
       </div>
     </div>
