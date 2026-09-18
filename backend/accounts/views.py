@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -77,6 +78,11 @@ class StudentProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = StudentProfileSerializer
     permission_classes = [IsAuthenticated]
 
+    parser_classes = [
+        MultiPartParser,
+        FormParser,
+    ]
+
     def get_object(self):
         profile, created = StudentProfile.objects.get_or_create(
             user=self.request.user,
@@ -95,3 +101,31 @@ class StudentProfileView(generics.RetrieveUpdateAPIView):
         )
 
         return profile
+
+    def update(self, request, *args, **kwargs):
+        print("\n==============================")
+        print("PROFILE UPDATE REQUEST")
+        print("==============================")
+
+        print("Content-Type:", request.content_type)
+
+        print("Data received:")
+        print(request.data)
+
+        print("\nFiles received:")
+        print(request.FILES)
+
+        if 'cv' in request.FILES:
+            uploaded_cv = request.FILES['cv']
+
+            print("\nCV FOUND")
+            print("Filename:", uploaded_cv.name)
+            print("Size:", uploaded_cv.size)
+            print("Content type:", uploaded_cv.content_type)
+
+        else:
+            print("\nNO CV FILE RECEIVED")
+
+        print("==============================\n")
+
+        return super().update(request, *args, **kwargs)
