@@ -9,6 +9,7 @@ from .serializers import (
     EmployerApplicationSerializer,
 )
 from internships.models import Internship
+from accounts.models import Notification
 
 
 class ApplicationCreateView(generics.CreateAPIView):
@@ -50,14 +51,21 @@ class ApplicationCreateView(generics.CreateAPIView):
         if use_saved_cv:
             profile = self.request.user.student_profile
 
-            serializer.save(
+            application = serializer.save(
                 student=self.request.user,
                 cv=profile.cv
             )
         else:
-            serializer.save(
+            application = serializer.save(
                 student=self.request.user
             )
+
+        Notification.objects.create(
+            user=self.request.user,
+            title='Application Submitted',
+            message=f'Your application for {application.internship.title} has been submitted successfully.',
+            notification_type='application'
+        )
 
 
 class ApplicationListView(generics.ListAPIView):
@@ -69,6 +77,7 @@ class ApplicationListView(generics.ListAPIView):
             student=self.request.user
         ).select_related('internship').order_by('-applied_at')
 
+
 class EmployerApplicationListView(generics.ListAPIView):
     serializer_class = EmployerApplicationSerializer
     permission_classes = [IsAuthenticated]
@@ -79,6 +88,7 @@ class EmployerApplicationListView(generics.ListAPIView):
         ).select_related(
             'internship'
         ).order_by('-applied_at')
+
 
 class EmployerApplicationStatusUpdateView(generics.UpdateAPIView):
     serializer_class = EmployerApplicationSerializer
@@ -92,6 +102,7 @@ class EmployerApplicationStatusUpdateView(generics.UpdateAPIView):
     def update(self, request, *args, **kwargs):
         application = self.get_object()
 
+        old_status = application.status
         new_status = request.data.get('status')
 
         valid_statuses = [
@@ -113,6 +124,14 @@ class EmployerApplicationStatusUpdateView(generics.UpdateAPIView):
 
         application.status = new_status
         application.save(update_fields=['status'])
+
+        if old_status != new_status:
+            Notification.objects.create(
+                user=application.student,
+                title='Application Status Updated',
+                message=f'Your application for {application.internship.title} is now {new_status}.',
+                notification_type='status'
+            )
 
         serializer = self.get_serializer(application)
 
@@ -150,6 +169,7 @@ class EmployerDashboardStatsView(APIView):
             'accepted_applicants': accepted_applicants,
             'pending_applicants': pending_applicants,
         })
+
 
 class EmployerInternshipApplicantsView(generics.ListAPIView):
     serializer_class = EmployerApplicationSerializer

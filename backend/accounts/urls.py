@@ -4,6 +4,9 @@ from .views import (
     StudentLoginView,
     StudentRegistrationView,
     StudentProfileView,
+    ChangePasswordView,
+    NotificationListView,
+    NotificationReadView,
 )
 
 
@@ -24,5 +27,23 @@ urlpatterns = [
         'profile/',
         StudentProfileView.as_view(),
         name='student-profile'
+    ),
+
+    path(
+        'change-password/',
+        ChangePasswordView.as_view(),
+        name='change-password'
+    ),
+
+    path(
+        'notifications/',
+        NotificationListView.as_view(),
+        name='notifications'
+    ),
+
+    path(
+        'notifications/<int:notification_id>/read/',
+        NotificationReadView.as_view(),
+        name='notification-read'
     ),
 ]

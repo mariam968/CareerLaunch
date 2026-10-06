@@ -22,6 +22,8 @@ import Register from './pages/Register'
 
 import EmployerRegister from "./pages/EmployerRegister";
 
+import Settings from './pages/Settings'
+
 
 
 import Dashboard from './pages/Dashboard'
@@ -206,6 +208,17 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+  path="/settings"
+  element={
+    <ProtectedRoute>
+      <DashboardLayout>
+        <Settings />
+      </DashboardLayout>
+    </ProtectedRoute>
+  }
+/>
 
         </Routes>
 

@@ -8,7 +8,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import StudentProfile
+from .models import StudentProfile, Notification
 from .serializers import (
     StudentRegistrationSerializer,
     StudentProfileSerializer,
@@ -71,6 +71,93 @@ class StudentLoginView(APIView):
                 'token': token.key,
                 'username': user.username,
             }
+        )
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        current_password = request.data.get('current_password')
+        new_password = request.data.get('new_password')
+
+        if not current_password or not new_password:
+            return Response(
+                {
+                    'detail': 'Current password and new password are required.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not request.user.check_password(current_password):
+            return Response(
+                {
+                    'detail': 'Current password is incorrect.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if len(new_password) < 8:
+            return Response(
+                {
+                    'detail': 'New password must be at least 8 characters long.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        request.user.set_password(new_password)
+        request.user.save()
+
+        return Response(
+            {
+                'detail': 'Password changed successfully.'
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class NotificationListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        notifications = Notification.objects.filter(
+            user=request.user
+        ).order_by('-created_at')
+
+        return Response([
+            {
+                'id': notification.id,
+                'title': notification.title,
+                'message': notification.message,
+                'notification_type': notification.notification_type,
+                'is_read': notification.is_read,
+                'created_at': notification.created_at,
+            }
+            for notification in notifications
+        ])
+
+
+class NotificationReadView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, notification_id):
+        try:
+            notification = Notification.objects.get(
+                id=notification_id,
+                user=request.user
+            )
+        except Notification.DoesNotExist:
+            return Response(
+                {'detail': 'Notification not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        notification.is_read = True
+        notification.save()
+
+        return Response(
+            {'detail': 'Notification marked as read.'},
+            status=status.HTTP_200_OK
         )
 
 
