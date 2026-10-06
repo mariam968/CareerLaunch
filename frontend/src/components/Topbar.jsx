@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { API_URL } from '../services/api'
 
-function Topbar() {
+function Topbar({ onMenuClick }) {
   const navigate = useNavigate()
 
   const [showNotifications, setShowNotifications] = useState(false)
@@ -114,18 +114,29 @@ function Topbar() {
   }
 
   return (
-    <header className="fixed left-64 right-0 top-0 z-10 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-8">
-      <div>
-        <p className="text-sm font-semibold text-slate-700">
-          Student Portal
-        </p>
+    <header className="fixed left-0 right-0 top-0 z-20 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6 md:left-64 md:px-8">
+      <div className="flex min-w-0 items-center gap-3">
+        <button
+          type="button"
+          onClick={onMenuClick}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xl text-slate-600 transition hover:bg-blue-50 hover:text-blue-600 md:hidden"
+          aria-label="Open navigation menu"
+        >
+          ☰
+        </button>
 
-        <p className="text-xs text-slate-400">
-          Your career journey starts here
-        </p>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-slate-700">
+            Student Portal
+          </p>
+
+          <p className="hidden text-xs text-slate-400 sm:block">
+            Your career journey starts here
+          </p>
+        </div>
       </div>
 
-      <div className="flex items-center gap-5">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-4 md:gap-5">
         <div className="relative">
           <button
             type="button"
@@ -151,7 +162,7 @@ function Topbar() {
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 top-12 z-50 w-96 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
+            <div className="absolute right-0 top-12 z-50 w-[calc(100vw-2rem)] max-w-96 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg">
               <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
                 <h3 className="text-sm font-semibold text-slate-900">
                   Notifications
@@ -240,21 +251,21 @@ function Topbar() {
           )}
         </div>
 
-        <div className="relative border-l border-slate-200 pl-5">
+        <div className="relative border-l border-slate-200 pl-2 sm:pl-4 md:pl-5">
           <button
             type="button"
             onClick={() => {
               setShowProfileMenu(!showProfileMenu)
               setShowNotifications(false)
             }}
-            className="flex items-center gap-3 rounded-lg px-2 py-1.5 transition hover:bg-slate-50"
+            className="flex items-center gap-2 rounded-lg px-1 py-1.5 transition hover:bg-slate-50 sm:gap-3 sm:px-2"
             aria-label="Open profile menu"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 font-bold text-white shadow-sm">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white shadow-sm sm:h-10 sm:w-10">
               M
             </div>
 
-            <div className="text-left">
+            <div className="hidden text-left sm:block">
               <p className="text-sm font-semibold text-slate-900">
                 Mariam
               </p>
@@ -265,7 +276,7 @@ function Topbar() {
             </div>
 
             <span
-              className={`text-xs text-slate-400 transition ${
+              className={`hidden text-xs text-slate-400 transition sm:block ${
                 showProfileMenu ? 'rotate-180' : ''
               }`}
             >
