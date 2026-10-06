@@ -37,13 +37,13 @@ function Register() {
     e.preventDefault();
 
     setError("");
-    setLoading(true);
 
     if (formData.password !== formData.password2) {
       setError("Passwords do not match.");
-      setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     const registrationData = {
       username: formData.username,
@@ -113,24 +113,16 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-
-      {/* Header */}
       <div className="flex h-16 items-center border-b border-slate-200 bg-white px-6">
         <h1 className="text-xl font-bold tracking-tight text-slate-900">
           Career<span className="text-blue-600">Launch</span>
         </h1>
       </div>
 
-      {/* Main */}
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-5 py-10">
-
         <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl md:grid-cols-2">
-
-          {/* Left Blue Panel */}
           <div className="hidden bg-blue-600 p-10 text-white md:flex md:flex-col md:justify-between">
-
             <div>
-
               <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
                 🎓
               </div>
@@ -144,11 +136,9 @@ function Register() {
                 opportunities, build experience, and take the next
                 step toward your career.
               </p>
-
             </div>
 
             <div className="rounded-2xl bg-blue-700 p-5">
-
               <p className="text-sm font-semibold">
                 Join CareerLaunch
               </p>
@@ -157,17 +147,11 @@ function Register() {
                 Discover opportunities, connect with employers,
                 and grow your professional experience.
               </p>
-
             </div>
-
           </div>
 
-          {/* Right Registration Form */}
           <div className="p-7 sm:p-10">
-
-            {/* Title */}
             <div className="mb-8">
-
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-xl md:hidden">
                 🎓
               </div>
@@ -180,38 +164,24 @@ function Register() {
                 Create your CareerLaunch account and start finding
                 opportunities.
               </p>
-
             </div>
 
-            {/* Error */}
             {error && (
               <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-
                 <p className="text-sm font-medium text-red-700">
                   {error}
                 </p>
-
               </div>
             )}
 
-            {/* Form */}
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-8"
-            >
-
-              {/* Account Information */}
+            <form onSubmit={handleSubmit} className="space-y-8">
               <div>
-
                 <h2 className="mb-4 text-lg font-semibold text-slate-900">
                   Account Information
                 </h2>
 
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-                  {/* Username */}
                   <div>
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Username
                     </label>
@@ -225,12 +195,9 @@ function Register() {
                       placeholder="Choose a username"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
 
-                  {/* Email */}
                   <div>
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Email
                     </label>
@@ -244,12 +211,9 @@ function Register() {
                       placeholder="you@example.com"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
 
-                  {/* Password */}
                   <div>
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Password
                     </label>
@@ -264,12 +228,9 @@ function Register() {
                       placeholder="At least 8 characters"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
 
-                  {/* Confirm Password */}
                   <div>
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Confirm Password
                     </label>
@@ -283,25 +244,17 @@ function Register() {
                       placeholder="Confirm your password"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
-
                 </div>
-
               </div>
 
-              {/* Personal Information */}
               <div>
-
                 <h2 className="mb-4 text-lg font-semibold text-slate-900">
                   Personal Information
                 </h2>
 
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-                  {/* Full Name */}
                   <div>
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Full Name
                     </label>
@@ -315,12 +268,9 @@ function Register() {
                       placeholder="Your full name"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
 
-                  {/* Phone */}
                   <div>
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Phone Number
                     </label>
@@ -334,12 +284,9 @@ function Register() {
                       placeholder="0700000000"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
 
-                  {/* Location */}
                   <div className="md:col-span-2">
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Location
                     </label>
@@ -353,25 +300,17 @@ function Register() {
                       placeholder="Kampala"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
-
                 </div>
-
               </div>
 
-              {/* Education */}
               <div>
-
                 <h2 className="mb-4 text-lg font-semibold text-slate-900">
                   Education
                 </h2>
 
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-                  {/* Institution */}
                   <div>
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Institution
                     </label>
@@ -385,12 +324,9 @@ function Register() {
                       placeholder="Makerere University"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
 
-                  {/* Course */}
                   <div>
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Course
                     </label>
@@ -404,12 +340,9 @@ function Register() {
                       placeholder="Computer Science"
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
-
                   </div>
 
-                  {/* Year */}
                   <div className="md:col-span-2">
-
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Year of Study
                     </label>
@@ -421,47 +354,23 @@ function Register() {
                       required
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     >
-                      <option value="">
-                        Select your year
-                      </option>
-
-                      <option value="Year 1">
-                        Year 1
-                      </option>
-
-                      <option value="Year 2">
-                        Year 2
-                      </option>
-
-                      <option value="Year 3">
-                        Year 3
-                      </option>
-
-                      <option value="Year 4">
-                        Year 4
-                      </option>
-
-                      <option value="Year 5">
-                        Year 5
-                      </option>
-
+                      <option value="">Select your year</option>
+                      <option value="Year 1">Year 1</option>
+                      <option value="Year 2">Year 2</option>
+                      <option value="Year 3">Year 3</option>
+                      <option value="Year 4">Year 4</option>
+                      <option value="Year 5">Year 5</option>
                     </select>
-
                   </div>
-
                 </div>
-
               </div>
 
-              {/* Additional Information */}
               <div>
-
                 <h2 className="mb-4 text-lg font-semibold text-slate-900">
                   Additional Information
                 </h2>
 
                 <div>
-
                   <label className="mb-2 block text-sm font-semibold text-slate-700">
                     Skills
                   </label>
@@ -474,27 +383,19 @@ function Register() {
                     placeholder="Python, React, Git, Communication..."
                     className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                   />
-
                 </div>
-
               </div>
 
-              {/* Create Account */}
               <button
                 type="submit"
                 disabled={loading}
                 className="w-full rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {loading
-                  ? "Creating account..."
-                  : "Create Student Account"}
+                {loading ? "Creating account..." : "Create Student Account"}
               </button>
-
             </form>
 
-            {/* Login / Employer Registration */}
             <div className="mt-8 border-t border-slate-200 pt-6 text-center">
-
               <p className="text-sm text-slate-500">
                 Already have a student account?
               </p>
@@ -508,7 +409,6 @@ function Register() {
               </button>
 
               <div className="my-5 flex items-center gap-3">
-
                 <div className="h-px flex-1 bg-slate-200"></div>
 
                 <span className="text-xs text-slate-400">
@@ -516,7 +416,6 @@ function Register() {
                 </span>
 
                 <div className="h-px flex-1 bg-slate-200"></div>
-
               </div>
 
               <p className="text-sm text-slate-500">
@@ -534,15 +433,10 @@ function Register() {
               <p className="mt-4 text-xs text-slate-400">
                 CareerLaunch • Connecting students with opportunities
               </p>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
