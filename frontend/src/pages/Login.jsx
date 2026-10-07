@@ -46,7 +46,9 @@ function Login() {
 
       if (!response.ok) {
         throw new Error(
-          data.error || data.detail || 'Invalid username or password.'
+          data.error ||
+            data.detail ||
+            'Invalid username or password.'
         )
       }
 
@@ -60,7 +62,8 @@ function Login() {
       console.error(err)
 
       setError(
-        err.message || 'Unable to log in. Please try again.'
+        err.message ||
+          'Unable to log in. Please try again.'
       )
     } finally {
       setLoading(false)
@@ -68,18 +71,18 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50 px-4 py-6 sm:px-6 sm:py-10">
 
-      <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md flex-col justify-center">
+      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-md flex-col justify-center sm:min-h-[calc(100vh-5rem)]">
 
         {/* CareerLaunch Header */}
-        <div className="mb-8 text-center">
+        <div className="mb-6 text-center sm:mb-8">
 
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-600 text-2xl font-bold text-white shadow-md">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-xl font-bold text-white shadow-md sm:h-16 sm:w-16 sm:text-2xl">
             CL
           </div>
 
-          <h1 className="mt-5 text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="mt-4 break-words text-2xl font-bold tracking-tight text-slate-900 sm:mt-5 sm:text-3xl">
             Career<span className="text-blue-600">Launch</span>
           </h1>
 
@@ -90,23 +93,23 @@ function Login() {
         </div>
 
         {/* Login Card */}
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
           {/* Header */}
-          <div className="border-b border-slate-100 bg-white px-6 py-6 sm:px-8">
+          <div className="border-b border-slate-100 px-5 py-5 sm:px-8 sm:py-6">
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3">
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-lg">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-lg">
                 👋
               </div>
 
-              <div>
-                <h2 className="text-xl font-bold text-slate-900">
+              <div className="min-w-0">
+                <h2 className="text-lg font-bold text-slate-900 sm:text-xl">
                   Welcome back
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm leading-5 text-slate-500">
                   Log in to your CareerLaunch account.
                 </p>
               </div>
@@ -115,7 +118,7 @@ function Login() {
 
           </div>
 
-          <div className="p-6 sm:p-8">
+          <div className="p-5 sm:p-8">
 
             {/* Account Type */}
             <div className="mb-6">
@@ -124,7 +127,7 @@ function Login() {
                 Logging in as
               </p>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
 
                 {/* Student */}
                 <div className="rounded-xl border-2 border-blue-600 bg-blue-50 p-3 text-center">
@@ -166,12 +169,12 @@ function Login() {
                     !
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-sm font-semibold text-red-800">
                       Login unsuccessful
                     </p>
 
-                    <p className="mt-1 text-sm text-red-600">
+                    <p className="mt-1 break-words text-sm leading-5 text-red-600">
                       {error}
                     </p>
                   </div>
@@ -188,7 +191,7 @@ function Login() {
             >
 
               {/* Username */}
-              <div>
+              <div className="min-w-0">
 
                 <label className="text-sm font-semibold text-slate-700">
                   Username
@@ -208,7 +211,7 @@ function Login() {
                     required
                     autoComplete="username"
                     placeholder="Enter your username"
-                    className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    className="w-full min-w-0 rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                   />
 
                 </div>
@@ -216,7 +219,7 @@ function Login() {
               </div>
 
               {/* Password */}
-              <div>
+              <div className="min-w-0">
 
                 <label className="text-sm font-semibold text-slate-700">
                   Password
@@ -236,7 +239,7 @@ function Login() {
                     required
                     autoComplete="current-password"
                     placeholder="Enter your password"
-                    className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    className="w-full min-w-0 rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                   />
 
                 </div>
@@ -263,18 +266,16 @@ function Login() {
 
               <div className="mt-4 grid gap-3">
 
-                {/* Student Register */}
                 <Link
                   to="/register"
-                  className="flex items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-600 transition hover:bg-blue-100"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-center text-sm font-semibold text-blue-600 transition hover:bg-blue-100"
                 >
                   🎓 Create a student account →
                 </Link>
 
-                {/* Employer Register */}
                 <Link
                   to="/employer/register"
-                  className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
                 >
                   🏢 Create an employer account →
                 </Link>
@@ -287,7 +288,7 @@ function Login() {
 
         </div>
 
-        <p className="mt-6 text-center text-xs text-slate-400">
+        <p className="mt-5 text-center text-xs leading-5 text-slate-400 sm:mt-6">
           CareerLaunch • Your career journey starts here 🚀
         </p>
 

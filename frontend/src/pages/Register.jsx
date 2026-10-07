@@ -1,49 +1,49 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { API_URL } from "../services/api";
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../services/api'
 
 function Register() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    password2: "",
-    full_name: "",
-    phone: "",
-    institution: "",
-    course: "",
-    year_of_study: "",
-    location: "",
-    skills: "",
-  });
+    username: '',
+    email: '',
+    password: '',
+    password2: '',
+    full_name: '',
+    phone: '',
+    institution: '',
+    course: '',
+    year_of_study: '',
+    location: '',
+    skills: '',
+  })
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     setFormData((previous) => ({
       ...previous,
       [name]: value,
-    }));
+    }))
 
-    setError("");
-  };
+    setError('')
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    setError("");
+    setError('')
 
     if (formData.password !== formData.password2) {
-      setError("Passwords do not match.");
-      return;
+      setError('Passwords do not match.')
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
     const registrationData = {
       username: formData.username,
@@ -56,73 +56,86 @@ function Register() {
       year_of_study: formData.year_of_study,
       location: formData.location,
       skills: formData.skills,
-    };
+    }
 
     try {
       const response = await fetch(
         `${API_URL}/api/accounts/register/`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(registrationData),
         }
-      );
+      )
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (!response.ok) {
-        const firstError = Object.values(data)[0];
+        const firstError = Object.values(data)[0]
 
         if (Array.isArray(firstError)) {
-          throw new Error(firstError[0]);
+          throw new Error(firstError[0])
         }
 
         throw new Error(
-          typeof firstError === "string"
+          typeof firstError === 'string'
             ? firstError
-            : data.detail || "Registration failed."
-        );
+            : data.detail || 'Registration failed.'
+        )
       }
 
       if (data.token) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem('token', data.token)
       }
 
       if (data.username) {
-        localStorage.setItem("username", data.username);
+        localStorage.setItem('username', data.username)
       }
 
       if (data.full_name) {
-        localStorage.setItem("full_name", data.full_name);
+        localStorage.setItem('full_name', data.full_name)
       } else {
-        localStorage.setItem("full_name", formData.full_name);
+        localStorage.setItem(
+          'full_name',
+          formData.full_name
+        )
       }
 
-      localStorage.setItem("userType", "student");
+      localStorage.setItem('userType', 'student')
 
-      navigate("/");
+      navigate('/')
     } catch (error) {
-      console.error("Registration error:", error);
-      setError(error.message);
+      console.error('Registration error:', error)
+      setError(error.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="flex h-16 items-center border-b border-slate-200 bg-white px-6">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50">
+
+      {/* Top Navigation */}
+      <div className="flex h-16 items-center border-b border-slate-200 bg-white px-4 sm:px-6">
+
         <h1 className="text-xl font-bold tracking-tight text-slate-900">
           Career<span className="text-blue-600">Launch</span>
         </h1>
+
       </div>
 
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-5 py-10">
-        <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl md:grid-cols-2">
+      {/* Registration Area */}
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-6 sm:px-6 sm:py-10">
+
+        <div className="grid w-full max-w-5xl min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl sm:rounded-3xl md:grid-cols-2">
+
+          {/* Left Panel */}
           <div className="hidden bg-blue-600 p-10 text-white md:flex md:flex-col md:justify-between">
+
             <div>
+
               <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
                 🎓
               </div>
@@ -136,9 +149,11 @@ function Register() {
                 opportunities, build experience, and take the next
                 step toward your career.
               </p>
+
             </div>
 
-            <div className="rounded-2xl bg-blue-700 p-5">
+            <div className="mt-10 rounded-2xl bg-blue-700 p-5">
+
               <p className="text-sm font-semibold">
                 Join CareerLaunch
               </p>
@@ -147,41 +162,56 @@ function Register() {
                 Discover opportunities, connect with employers,
                 and grow your professional experience.
               </p>
+
             </div>
+
           </div>
 
-          <div className="p-7 sm:p-10">
-            <div className="mb-8">
+          {/* Form Panel */}
+          <div className="min-w-0 p-5 sm:p-8 md:p-10">
+
+            <div className="mb-7 sm:mb-8">
+
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-xl md:hidden">
                 🎓
               </div>
 
-              <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+              <h1 className="break-words text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
                 Create student account
               </h1>
 
-              <p className="mt-2 text-sm text-slate-500">
+              <p className="mt-2 text-sm leading-6 text-slate-500">
                 Create your CareerLaunch account and start finding
                 opportunities.
               </p>
+
             </div>
 
+            {/* Error */}
             {error && (
               <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-                <p className="text-sm font-medium text-red-700">
+
+                <p className="break-words text-sm font-medium leading-5 text-red-700">
                   {error}
                 </p>
+
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="space-y-7 sm:space-y-8">
+
+              {/* Account Information */}
               <div>
+
                 <h2 className="mb-4 text-lg font-semibold text-slate-900">
                   Account Information
                 </h2>
 
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                  <div>
+
+                  {/* Username */}
+                  <div className="min-w-0">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Username
                     </label>
@@ -192,12 +222,16 @@ function Register() {
                       value={formData.username}
                       onChange={handleChange}
                       required
+                      autoComplete="username"
                       placeholder="Choose a username"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
 
-                  <div>
+                  {/* Email */}
+                  <div className="min-w-0">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Email
                     </label>
@@ -208,12 +242,16 @@ function Register() {
                       value={formData.email}
                       onChange={handleChange}
                       required
+                      autoComplete="email"
                       placeholder="you@example.com"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
 
-                  <div>
+                  {/* Password */}
+                  <div className="min-w-0">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Password
                     </label>
@@ -225,12 +263,16 @@ function Register() {
                       onChange={handleChange}
                       required
                       minLength={8}
+                      autoComplete="new-password"
                       placeholder="At least 8 characters"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
 
-                  <div>
+                  {/* Confirm Password */}
+                  <div className="min-w-0">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Confirm Password
                     </label>
@@ -241,20 +283,29 @@ function Register() {
                       value={formData.password2}
                       onChange={handleChange}
                       required
+                      autoComplete="new-password"
                       placeholder="Confirm your password"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
+
                 </div>
+
               </div>
 
+              {/* Personal Information */}
               <div>
+
                 <h2 className="mb-4 text-lg font-semibold text-slate-900">
                   Personal Information
                 </h2>
 
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                  <div>
+
+                  {/* Full Name */}
+                  <div className="min-w-0">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Full Name
                     </label>
@@ -265,12 +316,16 @@ function Register() {
                       value={formData.full_name}
                       onChange={handleChange}
                       required
+                      autoComplete="name"
                       placeholder="Your full name"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
 
-                  <div>
+                  {/* Phone */}
+                  <div className="min-w-0">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Phone Number
                     </label>
@@ -281,12 +336,16 @@ function Register() {
                       value={formData.phone}
                       onChange={handleChange}
                       required
+                      autoComplete="tel"
                       placeholder="0700000000"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
 
-                  <div className="md:col-span-2">
+                  {/* Location */}
+                  <div className="min-w-0 md:col-span-2">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Location
                     </label>
@@ -297,20 +356,29 @@ function Register() {
                       value={formData.location}
                       onChange={handleChange}
                       required
+                      autoComplete="address-level2"
                       placeholder="Kampala"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
+
                 </div>
+
               </div>
 
+              {/* Education */}
               <div>
+
                 <h2 className="mb-4 text-lg font-semibold text-slate-900">
                   Education
                 </h2>
 
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                  <div>
+
+                  {/* Institution */}
+                  <div className="min-w-0">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Institution
                     </label>
@@ -322,11 +390,14 @@ function Register() {
                       onChange={handleChange}
                       required
                       placeholder="Makerere University"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
 
-                  <div>
+                  {/* Course */}
+                  <div className="min-w-0">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Course
                     </label>
@@ -338,11 +409,14 @@ function Register() {
                       onChange={handleChange}
                       required
                       placeholder="Computer Science"
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     />
+
                   </div>
 
-                  <div className="md:col-span-2">
+                  {/* Year */}
+                  <div className="min-w-0 md:col-span-2">
+
                     <label className="mb-2 block text-sm font-semibold text-slate-700">
                       Year of Study
                     </label>
@@ -352,25 +426,43 @@ function Register() {
                       value={formData.year_of_study}
                       onChange={handleChange}
                       required
-                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                     >
-                      <option value="">Select your year</option>
-                      <option value="Year 1">Year 1</option>
-                      <option value="Year 2">Year 2</option>
-                      <option value="Year 3">Year 3</option>
-                      <option value="Year 4">Year 4</option>
-                      <option value="Year 5">Year 5</option>
+                      <option value="">
+                        Select your year
+                      </option>
+                      <option value="Year 1">
+                        Year 1
+                      </option>
+                      <option value="Year 2">
+                        Year 2
+                      </option>
+                      <option value="Year 3">
+                        Year 3
+                      </option>
+                      <option value="Year 4">
+                        Year 4
+                      </option>
+                      <option value="Year 5">
+                        Year 5
+                      </option>
                     </select>
+
                   </div>
+
                 </div>
+
               </div>
 
+              {/* Additional Information */}
               <div>
+
                 <h2 className="mb-4 text-lg font-semibold text-slate-900">
                   Additional Information
                 </h2>
 
-                <div>
+                <div className="min-w-0">
+
                   <label className="mb-2 block text-sm font-semibold text-slate-700">
                     Skills
                   </label>
@@ -381,41 +473,51 @@ function Register() {
                     onChange={handleChange}
                     rows="4"
                     placeholder="Python, React, Git, Communication..."
-                    className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                    className="w-full min-w-0 resize-y rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                   />
+
                 </div>
+
               </div>
 
+              {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {loading ? "Creating account..." : "Create Student Account"}
+                {loading
+                  ? 'Creating account...'
+                  : 'Create Student Account'}
               </button>
+
             </form>
 
+            {/* Footer Links */}
             <div className="mt-8 border-t border-slate-200 pt-6 text-center">
+
               <p className="text-sm text-slate-500">
                 Already have a student account?
               </p>
 
               <button
                 type="button"
-                onClick={() => navigate("/login")}
+                onClick={() => navigate('/login')}
                 className="mt-2 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
               >
                 Log in to your account →
               </button>
 
               <div className="my-5 flex items-center gap-3">
-                <div className="h-px flex-1 bg-slate-200"></div>
+
+                <div className="h-px flex-1 bg-slate-200" />
 
                 <span className="text-xs text-slate-400">
                   OR
                 </span>
 
-                <div className="h-px flex-1 bg-slate-200"></div>
+                <div className="h-px flex-1 bg-slate-200" />
+
               </div>
 
               <p className="text-sm text-slate-500">
@@ -424,21 +526,26 @@ function Register() {
 
               <button
                 type="button"
-                onClick={() => navigate("/employer/register")}
+                onClick={() => navigate('/employer/register')}
                 className="mt-2 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
               >
                 Create an employer account →
               </button>
 
-              <p className="mt-4 text-xs text-slate-400">
+              <p className="mt-4 break-words text-xs leading-5 text-slate-400">
                 CareerLaunch • Connecting students with opportunities
               </p>
+
             </div>
+
           </div>
+
         </div>
+
       </div>
+
     </div>
-  );
+  )
 }
 
-export default Register;
+export default Register
