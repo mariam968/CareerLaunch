@@ -46,27 +46,28 @@ function Logbook() {
   )
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50 px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
 
       <div className="mx-auto max-w-6xl">
 
         {/* Header */}
-        <div className="mb-8 overflow-hidden rounded-2xl bg-blue-600 shadow-sm">
+        <div className="mb-6 overflow-hidden rounded-2xl bg-blue-600 shadow-sm sm:mb-8">
 
-          <div className="px-6 py-7 sm:px-8">
+          <div className="px-5 py-6 sm:px-8 sm:py-7">
 
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-3 sm:gap-4">
 
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-2xl">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-xl sm:h-14 sm:w-14 sm:text-2xl">
                 📋
               </div>
 
-              <div>
-                <p className="text-sm font-medium text-blue-100">
+              <div className="min-w-0">
+
+                <p className="text-xs font-medium text-blue-100 sm:text-sm">
                   CareerLaunch Internship Tracker
                 </p>
 
-                <h1 className="mt-1 text-2xl font-bold text-white sm:text-3xl">
+                <h1 className="mt-1 break-words text-2xl font-bold text-white sm:text-3xl">
                   Internship Logbook
                 </h1>
 
@@ -74,6 +75,7 @@ function Logbook() {
                   Record your daily activities, track your working hours,
                   and keep a clear record of your internship experience.
                 </p>
+
               </div>
 
             </div>
@@ -87,47 +89,51 @@ function Logbook() {
         {/* Internship Information */}
         <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
-          <div className="border-b border-slate-100 px-6 py-5 sm:px-8">
+          <div className="border-b border-slate-100 px-5 py-5 sm:px-8">
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3">
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-lg">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-lg">
                 💼
               </div>
 
-              <div>
+              <div className="min-w-0">
+
                 <h2 className="text-lg font-bold text-slate-900">
                   Internship Information
                 </h2>
 
-                <p className="text-sm text-slate-500">
+                <p className="mt-1 text-sm leading-5 text-slate-500">
                   Overview of your current internship.
                 </p>
+
               </div>
 
             </div>
 
           </div>
 
-          <div className="grid grid-cols-1 gap-6 p-6 sm:p-8 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 p-5 sm:gap-6 sm:p-8 md:grid-cols-3">
 
             {/* Company */}
-            <div className="rounded-xl bg-slate-50 p-4">
+            <div className="min-w-0 rounded-xl bg-slate-50 p-4">
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3">
 
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 text-sm">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-sm">
                   🏢
                 </div>
 
-                <div>
+                <div className="min-w-0">
+
                   <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
                     Company
                   </p>
 
-                  <p className="mt-1 text-sm font-semibold text-slate-800">
+                  <p className="mt-1 break-words text-sm font-semibold text-slate-800">
                     TechNova Uganda
                   </p>
+
                 </div>
 
               </div>
@@ -135,22 +141,24 @@ function Logbook() {
             </div>
 
             {/* Internship */}
-            <div className="rounded-xl bg-slate-50 p-4">
+            <div className="min-w-0 rounded-xl bg-slate-50 p-4">
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3">
 
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-100 text-sm">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-sm">
                   💻
                 </div>
 
-                <div>
+                <div className="min-w-0">
+
                   <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
                     Internship
                   </p>
 
-                  <p className="mt-1 text-sm font-semibold text-slate-800">
+                  <p className="mt-1 break-words text-sm font-semibold text-slate-800">
                     Software Developer Intern
                   </p>
+
                 </div>
 
               </div>
@@ -158,22 +166,24 @@ function Logbook() {
             </div>
 
             {/* Total Hours */}
-            <div className="rounded-xl bg-blue-50 p-4">
+            <div className="min-w-0 rounded-xl bg-blue-50 p-4">
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3">
 
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-sm text-white">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-sm text-white">
                   ⏱️
                 </div>
 
-                <div>
+                <div className="min-w-0">
+
                   <p className="text-xs font-medium uppercase tracking-wide text-blue-500">
                     Total Hours
                   </p>
 
-                  <p className="mt-1 text-lg font-bold text-blue-700">
+                  <p className="mt-1 break-words text-lg font-bold text-blue-700">
                     {totalHours} hours
                   </p>
+
                 </div>
 
               </div>
@@ -187,29 +197,31 @@ function Logbook() {
         {/* Add Entry */}
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
-          <div className="border-b border-slate-100 px-6 py-5 sm:px-8">
+          <div className="border-b border-slate-100 px-5 py-5 sm:px-8">
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-start gap-3">
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50 text-lg">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-50 text-lg">
                 ➕
               </div>
 
-              <div>
+              <div className="min-w-0">
+
                 <h2 className="text-lg font-bold text-slate-900">
                   Add Daily Entry
                 </h2>
 
-                <p className="text-sm text-slate-500">
+                <p className="mt-1 text-sm leading-5 text-slate-500">
                   Record what you worked on today.
                 </p>
+
               </div>
 
             </div>
 
           </div>
 
-          <div className="p-6 sm:p-8">
+          <div className="p-5 sm:p-8">
 
             <form onSubmit={handleSubmit}>
 
@@ -217,7 +229,8 @@ function Logbook() {
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 
                 {/* Date */}
-                <div>
+                <div className="min-w-0">
+
                   <label className="text-sm font-semibold text-slate-700">
                     Date
                   </label>
@@ -234,14 +247,16 @@ function Logbook() {
                       value={formData.date}
                       onChange={handleChange}
                       required
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pl-11 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-white px-4 py-3 pl-11 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     />
 
                   </div>
+
                 </div>
 
                 {/* Hours */}
-                <div>
+                <div className="min-w-0">
+
                   <label className="text-sm font-semibold text-slate-700">
                     Hours Worked
                   </label>
@@ -261,16 +276,17 @@ function Logbook() {
                       onChange={handleChange}
                       required
                       placeholder="e.g. 7"
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pl-11 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      className="w-full min-w-0 rounded-xl border border-slate-200 bg-white px-4 py-3 pl-11 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                     />
 
                   </div>
+
                 </div>
 
               </div>
 
               {/* Activity */}
-              <div className="mt-5">
+              <div className="mt-5 min-w-0">
 
                 <label className="text-sm font-semibold text-slate-700">
                   Activities / Work Done
@@ -283,10 +299,10 @@ function Logbook() {
                   required
                   rows="5"
                   placeholder="Describe what you worked on today..."
-                  className="mt-2 w-full resize-none rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                  className="mt-2 w-full min-w-0 resize-y rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                 />
 
-                <p className="mt-2 text-xs text-slate-400">
+                <p className="mt-2 text-xs leading-5 text-slate-400">
                   Include important tasks, skills practiced, meetings,
                   or lessons learned.
                 </p>
@@ -294,11 +310,11 @@ function Logbook() {
               </div>
 
               {/* Submit */}
-              <div className="mt-6 flex justify-end">
+              <div className="mt-6">
 
                 <button
                   type="submit"
-                  className="inline-flex items-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md"
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md sm:w-auto"
                 >
                   Add Entry →
                 </button>
@@ -312,22 +328,24 @@ function Logbook() {
         </div>
 
         {/* Daily Entries */}
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
 
-          <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
 
-            <div>
+            <div className="min-w-0">
+
               <h2 className="text-xl font-bold text-slate-900">
                 Daily Entries
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm leading-5 text-slate-500">
                 Your recorded internship activities.
               </p>
+
             </div>
 
             {entries.length > 0 && (
-              <div className="rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600">
+              <div className="w-fit rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600">
                 {entries.length}{' '}
                 {entries.length === 1
                   ? 'entry'
@@ -339,7 +357,8 @@ function Logbook() {
 
           {/* Empty State */}
           {entries.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm sm:p-14">
+
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center shadow-sm sm:p-14">
 
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-3xl">
                 📋
@@ -355,32 +374,34 @@ function Logbook() {
               </p>
 
             </div>
+
           ) : (
 
             /* Entries */
             <div className="space-y-4">
 
               {entries.map((entry) => (
+
                 <div
                   key={entry.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-blue-200 hover:shadow-md"
+                  className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-blue-200 hover:shadow-md sm:p-6"
                 >
 
-                  <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 
-                    <div className="flex gap-4">
+                    <div className="flex min-w-0 gap-3 sm:gap-4">
 
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-lg">
                         📅
                       </div>
 
-                      <div>
+                      <div className="min-w-0">
 
                         <p className="text-sm font-bold text-blue-600">
                           {entry.date}
                         </p>
 
-                        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
+                        <p className="mt-2 break-words text-sm leading-6 text-slate-600">
                           {entry.activity}
                         </p>
 
@@ -388,16 +409,18 @@ function Logbook() {
 
                     </div>
 
-                    <div className="flex shrink-0 items-center gap-2 rounded-xl bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700">
+                    <div className="flex w-fit shrink-0 items-center gap-2 rounded-xl bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700">
                       ⏱️ {entry.hours} hours
                     </div>
 
                   </div>
 
                 </div>
+
               ))}
 
             </div>
+
           )}
 
         </div>

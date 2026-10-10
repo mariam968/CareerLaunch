@@ -60,23 +60,20 @@ function EmployerLogin() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-
+    <div className="min-h-screen overflow-x-hidden bg-slate-50">
       {/* Header */}
-      <div className="flex h-16 items-center border-b border-slate-200 bg-white px-6">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900">
+      <header className="flex h-16 items-center border-b border-slate-200 bg-white px-4 sm:px-6">
+        <h1 className="text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
           Career<span className="text-blue-600">Launch</span>
         </h1>
-      </div>
+      </header>
 
       {/* Main */}
-      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-5 py-10">
-
-        <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl md:grid-cols-2">
+      <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-6 sm:px-5 sm:py-10">
+        <div className="grid w-full max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl sm:rounded-3xl md:grid-cols-2">
 
           {/* Left side */}
           <div className="hidden bg-blue-600 p-10 text-white md:flex md:flex-col md:justify-between">
-
             <div>
               <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
                 🏢
@@ -102,26 +99,22 @@ function EmployerLogin() {
                 from one place.
               </p>
             </div>
-
           </div>
 
           {/* Right side */}
-          <div className="p-7 sm:p-10">
-
-            <div className="mb-8">
-
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-xl md:hidden">
+          <div className="p-5 sm:p-8 md:p-10">
+            <div className="mb-7 sm:mb-8">
+              <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-xl md:hidden">
                 🏢
               </div>
 
-              <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
                 Employer Login
               </h1>
 
-              <p className="mt-2 text-sm text-slate-500">
+              <p className="mt-2 text-sm leading-5 text-slate-500">
                 Log in to manage your CareerLaunch employer account.
               </p>
-
             </div>
 
             {/* Error */}
@@ -129,16 +122,14 @@ function EmployerLogin() {
               <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
                 <span>⚠️</span>
 
-                <p className="whitespace-pre-line text-sm font-medium text-red-700">
+                <p className="min-w-0 whitespace-pre-line break-words text-sm font-medium text-red-700">
                   {error}
                 </p>
               </div>
             )}
 
-            {/* Login form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-
-              {/* Username */}
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
               <div>
                 <label
                   htmlFor="username"
@@ -155,11 +146,11 @@ function EmployerLogin() {
                   onChange={handleChange}
                   placeholder="Enter your username"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                  autoComplete="username"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
-              {/* Password */}
               <div>
                 <label
                   htmlFor="password"
@@ -176,11 +167,11 @@ function EmployerLogin() {
                   onChange={handleChange}
                   placeholder="Enter your password"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                  autoComplete="current-password"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
-              {/* Login button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -188,12 +179,10 @@ function EmployerLogin() {
               >
                 {loading ? "Logging in..." : "Log In"}
               </button>
-
             </form>
 
-            {/* Register link */}
-            <div className="mt-8 border-t border-slate-200 pt-6 text-center">
-
+            {/* Register */}
+            <div className="mt-7 border-t border-slate-200 pt-6 text-center sm:mt-8">
               <p className="text-sm text-slate-500">
                 Don't have an employer account?
               </p>
@@ -209,12 +198,10 @@ function EmployerLogin() {
               <p className="mt-4 text-xs text-slate-400">
                 CareerLaunch Employer Portal
               </p>
-
             </div>
-
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

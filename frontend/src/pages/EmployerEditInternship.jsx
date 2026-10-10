@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import {
   getEmployerInternships,
   updateEmployerInternship,
@@ -92,9 +93,11 @@ function EmployerEditInternship() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 p-8">
+      <div className="min-h-screen bg-slate-50 px-4 py-6 sm:p-8">
         <div className="mx-auto max-w-4xl">
-          <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+
             <p className="font-medium text-blue-600">
               Loading internship...
             </p>
@@ -105,7 +108,7 @@ function EmployerEditInternship() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-8">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50 px-4 py-5 sm:px-6 sm:py-8 md:px-8">
       <div className="mx-auto max-w-5xl">
 
         {/* Back */}
@@ -114,34 +117,33 @@ function EmployerEditInternship() {
           onClick={() =>
             navigate("/employer/dashboard")
           }
-          className="mb-6 flex items-center gap-2 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-600"
+          className="mb-5 flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-600 sm:mb-6"
         >
           <span className="text-lg">←</span>
           Back to Dashboard
         </button>
 
         {/* Header */}
-        <div className="mb-6 overflow-hidden rounded-2xl bg-blue-600 shadow-lg">
-          <div className="flex items-center gap-4 px-6 py-7 md:px-8">
+        <div className="mb-5 overflow-hidden rounded-2xl bg-blue-600 shadow-lg sm:mb-6">
+          <div className="flex flex-col gap-4 px-5 py-6 sm:flex-row sm:items-center sm:px-7 sm:py-7 md:px-8">
 
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-xl shadow-sm sm:h-14 sm:w-14 sm:rounded-2xl sm:text-2xl">
               ✏️
             </div>
 
-            <div>
-              <h1 className="text-2xl font-bold text-white md:text-3xl">
+            <div className="min-w-0">
+              <h1 className="break-words text-2xl font-bold text-white sm:text-3xl">
                 Edit Internship
               </h1>
 
-              <p className="mt-1 text-sm text-blue-100">
+              <p className="mt-1 text-sm leading-5 text-blue-100">
                 Update the details of your internship opportunity.
               </p>
             </div>
-
           </div>
 
-          <div className="bg-blue-700 px-6 py-3 md:px-8">
-            <p className="text-xs font-medium text-blue-100">
+          <div className="bg-blue-700 px-5 py-3 sm:px-7 md:px-8">
+            <p className="text-xs font-medium leading-5 text-blue-100">
               Make sure your internship information is clear and up to date.
             </p>
           </div>
@@ -149,10 +151,10 @@ function EmployerEditInternship() {
 
         {/* Error */}
         {error && (
-          <div className="mb-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-4">
-            <span className="text-lg">⚠️</span>
+          <div className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-4 sm:mb-6 sm:px-5">
+            <span className="shrink-0 text-lg">⚠️</span>
 
-            <p className="text-sm font-medium text-red-700">
+            <p className="min-w-0 break-words text-sm font-medium leading-6 text-red-700">
               {error}
             </p>
           </div>
@@ -165,25 +167,25 @@ function EmployerEditInternship() {
         >
 
           {/* Basic Information */}
-          <div className="border-b border-slate-200 px-6 py-7 md:px-8">
+          <section className="border-b border-slate-200 px-5 py-6 sm:px-7 sm:py-7 md:px-8">
 
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-lg">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-lg">
                 💼
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <h2 className="font-bold text-slate-900">
                   Basic Information
                 </h2>
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs leading-5 text-slate-500">
                   Tell students about this opportunity.
                 </p>
               </div>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
 
               {/* Title */}
               <div className="md:col-span-2">
@@ -202,12 +204,12 @@ function EmployerEditInternship() {
                   onChange={handleChange}
                   placeholder="e.g. Software Development Intern"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                  className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
               {/* Company */}
-              <div>
+              <div className="min-w-0">
                 <label
                   htmlFor="company"
                   className="mb-2 block text-sm font-semibold text-slate-700"
@@ -223,12 +225,12 @@ function EmployerEditInternship() {
                   onChange={handleChange}
                   placeholder="Enter company name"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                  className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
               {/* Location */}
-              <div>
+              <div className="min-w-0">
                 <label
                   htmlFor="location"
                   className="mb-2 block text-sm font-semibold text-slate-700"
@@ -244,12 +246,12 @@ function EmployerEditInternship() {
                   onChange={handleChange}
                   placeholder="e.g. Kampala, Uganda"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                  className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
               {/* Type */}
-              <div>
+              <div className="min-w-0">
                 <label
                   htmlFor="internship_type"
                   className="mb-2 block text-sm font-semibold text-slate-700"
@@ -262,20 +264,17 @@ function EmployerEditInternship() {
                   name="internship_type"
                   value={formData.internship_type}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                  className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                 >
                   <option value="Full-time">
                     Full-time
                   </option>
-
                   <option value="Part-time">
                     Part-time
                   </option>
-
                   <option value="Hybrid">
                     Hybrid
                   </option>
-
                   <option value="Remote">
                     Remote
                   </option>
@@ -283,7 +282,7 @@ function EmployerEditInternship() {
               </div>
 
               {/* Category */}
-              <div>
+              <div className="min-w-0">
                 <label
                   htmlFor="category"
                   className="mb-2 block text-sm font-semibold text-slate-700"
@@ -299,27 +298,26 @@ function EmployerEditInternship() {
                   onChange={handleChange}
                   placeholder="e.g. Technology"
                   required
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+                  className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
                 />
               </div>
-
             </div>
-          </div>
+          </section>
 
-          {/* Description */}
-          <div className="border-b border-slate-200 bg-blue-50/40 px-6 py-7 md:px-8">
+          {/* Internship Details */}
+          <section className="border-b border-slate-200 bg-blue-50/40 px-5 py-6 sm:px-7 sm:py-7 md:px-8">
 
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-lg">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-lg">
                 📝
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <h2 className="font-bold text-slate-900">
                   Internship Details
                 </h2>
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs leading-5 text-slate-500">
                   Describe the opportunity for students.
                 </p>
               </div>
@@ -339,7 +337,7 @@ function EmployerEditInternship() {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                rows="6"
+                rows={6}
                 placeholder="Describe the internship opportunity..."
                 required
                 className="w-full resize-y rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
@@ -360,7 +358,7 @@ function EmployerEditInternship() {
                 name="requirements"
                 value={formData.requirements}
                 onChange={handleChange}
-                rows="6"
+                rows={6}
                 placeholder="List the skills, qualifications, or experience required..."
                 required
                 className="w-full resize-y rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
@@ -381,35 +379,34 @@ function EmployerEditInternship() {
                 name="responsibilities"
                 value={formData.responsibilities}
                 onChange={handleChange}
-                rows="6"
+                rows={6}
                 placeholder="Describe what the intern will be responsible for..."
                 required
                 className="w-full resize-y rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
               />
             </div>
-
-          </div>
+          </section>
 
           {/* Deadline */}
-          <div className="px-6 py-7 md:px-8">
+          <section className="px-5 py-6 sm:px-7 sm:py-7 md:px-8">
 
             <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-lg">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-100 text-lg">
                 📅
               </div>
 
-              <div>
+              <div className="min-w-0">
                 <h2 className="font-bold text-slate-900">
                   Application Deadline
                 </h2>
 
-                <p className="text-xs text-slate-500">
+                <p className="text-xs leading-5 text-slate-500">
                   Set the final date students can apply.
                 </p>
               </div>
             </div>
 
-            <div className="max-w-md">
+            <div className="w-full max-w-md">
               <label
                 htmlFor="deadline"
                 className="mb-2 block text-sm font-semibold text-slate-700"
@@ -427,18 +424,17 @@ function EmployerEditInternship() {
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
               />
             </div>
-
-          </div>
+          </section>
 
           {/* Buttons */}
-          <div className="flex flex-col-reverse gap-3 border-t border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:justify-end md:px-8">
+          <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50 px-5 py-5 sm:flex-row sm:justify-end sm:px-7 md:px-8">
 
             <button
               type="button"
               onClick={() =>
                 navigate("/employer/dashboard")
               }
-              className="rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+              className="order-2 w-full rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 sm:order-1 sm:w-auto"
             >
               Cancel
             </button>
@@ -446,15 +442,12 @@ function EmployerEditInternship() {
             <button
               type="submit"
               disabled={saving}
-              className="rounded-xl bg-blue-600 px-7 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+              className="order-1 w-full rounded-xl bg-blue-600 px-7 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 sm:order-2 sm:w-auto"
             >
               {saving ? "Saving..." : "Save Changes"}
             </button>
-
           </div>
-
         </form>
-
       </div>
     </div>
   );

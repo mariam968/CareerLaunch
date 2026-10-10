@@ -99,9 +99,11 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50 px-4 py-5 sm:px-6 sm:py-8 md:px-8 md:py-8">
+
+      {/* Welcome Section */}
+      <div className="mb-6 sm:mb-8">
+        <h1 className="break-words text-2xl font-bold leading-tight text-slate-900 sm:text-3xl">
           {greeting},{" "}
           {firstName || "Student"}{" "}
           {greeting === "Good morning"
@@ -111,14 +113,17 @@ function Dashboard() {
             : "🌙"}
         </h1>
 
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 sm:text-base">
           Welcome back to CareerLaunch. Let's work towards your next
           opportunity.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      {/* Statistics */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+
+        {/* Applications Card */}
+        <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <h2 className="text-sm font-medium text-slate-500">
             Applications
           </h2>
@@ -127,12 +132,13 @@ function Dashboard() {
             {applicationCount}
           </p>
 
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 break-words text-sm text-slate-500">
             Applications submitted
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        {/* Profile Card */}
+        <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <h2 className="text-sm font-medium text-slate-500">
             Profile
           </h2>
@@ -141,11 +147,12 @@ function Dashboard() {
             {profileCompletion}%
           </p>
 
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 break-words text-sm text-slate-500">
             Profile completion
           </p>
 
-          <div className="mt-4 h-2 w-full rounded-full bg-slate-200">
+          {/* Progress Bar */}
+          <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-slate-200">
             <div
               className="h-2 rounded-full bg-blue-600 transition-all duration-500"
               style={{
@@ -156,12 +163,14 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mt-8 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-slate-900">
+      {/* Recommended Section */}
+      <div className="mt-6 min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:mt-8 sm:p-6">
+
+        <h2 className="break-words text-lg font-bold text-slate-900 sm:text-xl">
           Recommended for you
         </h2>
 
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 max-w-2xl break-words text-sm leading-6 text-slate-500 sm:text-base">
           Find internship opportunities that match your skills and
           interests.
         </p>
@@ -170,11 +179,12 @@ function Dashboard() {
           onClick={() => {
             window.location.href = "/internships";
           }}
-          className="mt-5 rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
+          className="mt-5 flex w-full items-center justify-center rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
         >
           Browse Internships
         </button>
       </div>
+
     </div>
   );
 }

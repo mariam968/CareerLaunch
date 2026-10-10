@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+
 import { getApplications } from '../services/applicationApi'
 
 function getStatusStyle(status) {
@@ -76,20 +77,19 @@ function Applications() {
   }, [])
 
   const underReviewCount = applications.filter(
-    (application) =>
-      application.status === 'Under Review'
+    (application) => application.status === 'Under Review'
   ).length
 
   const shortlistedCount = applications.filter(
-    (application) =>
-      application.status === 'Shortlisted'
+    (application) => application.status === 'Shortlisted'
   ).length
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 px-4 py-8">
+      <div className="min-h-screen overflow-x-hidden bg-slate-50 px-4 py-6 sm:px-6 sm:py-8">
         <div className="mx-auto max-w-6xl">
-          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm sm:p-12">
 
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-blue-50 text-2xl">
               📄
@@ -99,11 +99,12 @@ function Applications() {
               Loading your applications
             </h2>
 
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm leading-6 text-slate-500">
               Please wait while we retrieve your application history.
             </p>
 
           </div>
+
         </div>
       </div>
     )
@@ -111,9 +112,10 @@ function Applications() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50 px-4 py-8">
+      <div className="min-h-screen overflow-x-hidden bg-slate-50 px-4 py-6 sm:px-6 sm:py-8">
         <div className="mx-auto max-w-6xl">
-          <div className="rounded-2xl border border-red-200 bg-red-50 p-10 text-center">
+
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center sm:p-10">
 
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
               !
@@ -123,44 +125,47 @@ function Applications() {
               Something went wrong
             </p>
 
-            <p className="mt-1 text-sm text-red-600">
+            <p className="mt-1 break-words text-sm leading-6 text-red-600">
               {error}
             </p>
 
           </div>
+
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen overflow-x-hidden bg-slate-50">
 
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
 
         {/* Header */}
         <div className="overflow-hidden rounded-2xl bg-blue-600 shadow-sm">
 
-          <div className="px-6 py-7 sm:px-8">
+          <div className="px-5 py-6 sm:px-8 sm:py-7">
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-start gap-3 sm:items-center sm:gap-4">
 
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/15 text-2xl">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/15 text-xl sm:h-12 sm:w-12 sm:text-2xl">
                 📄
               </div>
 
-              <div>
-                <p className="text-sm font-medium text-blue-100">
+              <div className="min-w-0">
+
+                <p className="text-xs font-medium text-blue-100 sm:text-sm">
                   CareerLaunch
                 </p>
 
-                <h1 className="mt-1 text-2xl font-bold text-white sm:text-3xl">
+                <h1 className="mt-1 break-words text-2xl font-bold text-white sm:text-3xl">
                   My Applications
                 </h1>
 
-                <p className="mt-2 text-sm text-blue-100">
+                <p className="mt-2 text-sm leading-6 text-blue-100">
                   Track the progress of your internship applications.
                 </p>
+
               </div>
 
             </div>
@@ -168,17 +173,19 @@ function Applications() {
           </div>
 
           <div className="h-1 bg-blue-700" />
+
         </div>
 
-        {/* Summary cards */}
-        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-3">
+        {/* Summary Cards */}
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:mt-6 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
 
           {/* Total */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6">
 
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
 
-              <div>
+              <div className="min-w-0">
+
                 <p className="text-sm font-medium text-slate-500">
                   Total Applications
                 </p>
@@ -187,12 +194,13 @@ function Applications() {
                   {applications.length}
                 </p>
 
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs leading-5 text-slate-400">
                   Applications submitted
                 </p>
+
               </div>
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-xl">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-xl">
                 📄
               </div>
 
@@ -201,11 +209,12 @@ function Applications() {
           </div>
 
           {/* Under Review */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6">
 
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
 
-              <div>
+              <div className="min-w-0">
+
                 <p className="text-sm font-medium text-slate-500">
                   Under Review
                 </p>
@@ -214,12 +223,13 @@ function Applications() {
                   {underReviewCount}
                 </p>
 
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs leading-5 text-slate-400">
                   Waiting for employer review
                 </p>
+
               </div>
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-xl">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-xl">
                 👀
               </div>
 
@@ -228,11 +238,12 @@ function Applications() {
           </div>
 
           {/* Shortlisted */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6">
 
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between gap-4">
 
-              <div>
+              <div className="min-w-0">
+
                 <p className="text-sm font-medium text-slate-500">
                   Shortlisted
                 </p>
@@ -241,12 +252,13 @@ function Applications() {
                   {shortlistedCount}
                 </p>
 
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 text-xs leading-5 text-slate-400">
                   Applications moving forward
                 </p>
+
               </div>
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 text-xl">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-green-50 text-xl">
                 ⭐
               </div>
 
@@ -256,25 +268,27 @@ function Applications() {
 
         </div>
 
-        {/* Applications section */}
-        <div className="mt-8">
+        {/* Applications Section */}
+        <div className="mt-7 sm:mt-8">
 
-          <div className="mb-5 flex items-center justify-between">
+          <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-            <div>
-              <h2 className="text-lg font-bold text-slate-900">
+            <div className="min-w-0">
+
+              <h2 className="text-lg font-bold text-slate-900 sm:text-xl">
                 Application History
               </h2>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm leading-5 text-slate-500">
                 View the internships you have applied for.
               </p>
+
             </div>
 
             {applications.length > 0 && (
               <Link
                 to="/internships"
-                className="hidden rounded-xl bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-100 sm:block"
+                className="inline-flex w-full items-center justify-center rounded-xl bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-100 sm:w-auto"
               >
                 Find More Internships
               </Link>
@@ -283,8 +297,9 @@ function Applications() {
           </div>
 
           {applications.length === 0 ? (
-            /* Empty state */
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center shadow-sm">
+
+            /* Empty State */
+            <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-10 text-center shadow-sm sm:px-6 sm:py-14">
 
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-3xl">
                 📄
@@ -301,29 +316,32 @@ function Applications() {
 
               <Link
                 to="/internships"
-                className="mt-6 inline-flex items-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md"
+                className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md sm:w-auto"
               >
                 Browse Internships →
               </Link>
 
             </div>
+
           ) : (
-            /* Applications list */
+
+            /* Applications List */
             <div className="space-y-4">
 
               {applications.map((application) => (
+
                 <div
                   key={application.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6"
+                  className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:p-6"
                 >
 
                   <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
 
-                    {/* Internship information */}
-                    <div className="flex min-w-0 gap-4">
+                    {/* Internship Information */}
+                    <div className="flex min-w-0 gap-3 sm:gap-4">
 
-                      {/* Company initial */}
-                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-xl font-bold text-white shadow-sm">
+                      {/* Company Initial */}
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold text-white shadow-sm sm:h-14 sm:w-14 sm:text-xl">
                         {application.company
                           ? application.company.charAt(0).toUpperCase()
                           : 'I'}
@@ -331,14 +349,13 @@ function Applications() {
 
                       <div className="min-w-0">
 
-                        <h2 className="truncate text-lg font-bold text-slate-900">
+                        <h2 className="break-words text-base font-bold text-slate-900 sm:text-lg">
                           {application.internship_title ||
                             'Internship Application'}
                         </h2>
 
-                        <p className="mt-1 text-sm font-medium text-blue-600">
-                          {application.company ||
-                            'Company'}
+                        <p className="mt-1 break-words text-sm font-medium text-blue-600">
+                          {application.company || 'Company'}
                         </p>
 
                         <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-400">
@@ -352,9 +369,11 @@ function Applications() {
                           </span>
 
                           {application.institution && (
-                            <span className="flex items-center gap-1">
+                            <span className="flex min-w-0 items-center gap-1 break-words">
                               🎓
-                              {application.institution}
+                              <span className="break-words">
+                                {application.institution}
+                              </span>
                             </span>
                           )}
 
@@ -365,10 +384,10 @@ function Applications() {
                     </div>
 
                     {/* Status */}
-                    <div className="flex shrink-0 items-center md:justify-end">
+                    <div className="flex w-full shrink-0 md:w-auto md:justify-end">
 
                       <span
-                        className={`inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-semibold ${getStatusStyle(
+                        className={`inline-flex w-full items-center justify-center gap-2 rounded-full px-3.5 py-2 text-xs font-semibold md:w-auto ${getStatusStyle(
                           application.status
                         )}`}
                       >
@@ -383,10 +402,10 @@ function Applications() {
 
                   </div>
 
-                  {/* Bottom accent */}
+                  {/* Bottom Accent */}
                   <div className="mt-5 border-t border-slate-100 pt-4">
 
-                    <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
 
                       <p className="text-xs text-slate-400">
                         Application #{application.id}
@@ -401,9 +420,11 @@ function Applications() {
                   </div>
 
                 </div>
+
               ))}
 
             </div>
+
           )}
 
         </div>
