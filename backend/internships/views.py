@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 
 from .models import Internship
 from .serializers import (
@@ -24,6 +25,11 @@ class EmployerInternshipCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         profile = self.request.user.employer_profile
+
+        if profile.verification_status != 'verified':
+            raise PermissionDenied(
+                'Your employer account must be verified before you can post internships.'
+            )
 
         serializer.save(
             employer=self.request.user,
